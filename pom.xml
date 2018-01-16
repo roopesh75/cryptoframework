@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>ul-test-automation</groupId>
+	<artifactId>testscripts_lms</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<surefire.fork.count>3</surefire.fork.count>
+		<apache-maven>1.8</apache-maven>
+		<selenium-webdriver-version>3.6.0</selenium-webdriver-version>
+		<maven.compiler.version>3.0</maven.compiler.version>
+		<commons-config-version>1.9</commons-config-version>
+		<log4j-version>1.2.17</log4j-version>
+
+		<surefire.version>2.19.1</surefire.version>
+		<commons.io.version>1.3.2</commons.io.version>
+		<commons-jxpath-version>1.3</commons-jxpath-version>
+
+		<jenkins.buildUserFirstName>DefaultFirstName</jenkins.buildUserFirstName>
+	</properties>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+			<resource>
+				<directory>src/test/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven.compiler.version}</version>
+				<configuration>
+					<encoding>${project.build.sourceEncoding}</encoding>
+					<showWarnings>false</showWarnings>
+					<source>${apache-maven}</source>
+					<target>${apache-maven}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.0-beta-3</version>
+
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${surefire.version}</version>
+				<configuration>
+					<groups>${testng.groups}</groups>
+					<suiteXmlFiles>
+						<suiteXmlFile>${suiteXml}</suiteXmlFile>
+					</suiteXmlFiles>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.25</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-model</artifactId>
+			<version>3.3.9</version>
+		</dependency>
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itextpdf</artifactId>
+			<version>5.5.12</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.25</version>
+		</dependency>
+		<dependency>
+			<groupId>com.aventstack</groupId>
+			<artifactId>extentreports</artifactId>
+			<version>3.1.2</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/joda-time/joda-time -->
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.9.9</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.vimalselvam</groupId>
+			<artifactId>testng-extentsreport</artifactId>
+			<version>1.3.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.google.guava</groupId>
+					<artifactId>guava</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.microsoft.tfs</groupId>
+			<artifactId>sdk</artifactId>
+			<version>11.0.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/com.microsoft.tfs.sdk-11.0.0.jar</systemPath>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.relevantcodes/extentreports -->
+		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.17</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.jayway.restassured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>2.9.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commons.io.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>${selenium-webdriver-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<!-- <dependency> <groupId>com.google.guava</groupId> <artifactId>guava</artifactId> 
+			<version>21.0</version> </dependency> -->
+		<!-- <dependency> <groupId>net.lightbody.bmp</groupId> <artifactId>browsermob-proxy</artifactId> 
+			<version>2.0.0</version> </dependency> -->
+		<dependency>
+			<groupId>commons-configuration</groupId>
+			<artifactId>commons-configuration</artifactId>
+			<version>${commons-config-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-jxpath</groupId>
+			<artifactId>commons-jxpath</artifactId>
+			<version>${commons-jxpath-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.16</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.11</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jdom</groupId>
+			<artifactId>jdom2</artifactId>
+			<version>2.0.5</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.appium/java-client -->
+		<dependency>
+			<groupId>io.appium</groupId>
+			<artifactId>java-client</artifactId>
+			<version>2.1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jaxen</groupId>
+			<artifactId>jaxen</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-vfs2</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.testng/testng -->
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>6.11</version>
+		</dependency>
+
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>ul-grid-firefox</id>
+			<activation>
+				<property>
+					<name>env</name>
+					<value>ul-grid-firefox</value>
+				</property>
+			</activation>
+			<properties>
+				<env.tfs>http://cwsource01:8080/tfs/UL Knowledge Services</env.tfs>
+				<env.tfsProjectLocationPrefix>$/TestNG/DEV/UITestAutomation/</env.tfsProjectLocationPrefix>
+				<env.banner>ComplianceWire</env.banner>
+				<env.execType>grid</env.execType>
+				<env.tools>http://selenium01:9000</env.tools>
+				<env.url>https://nextnb.compliancewire.com</env.url>
+				<env.profile>ULEnvironments</env.profile>
+				<driver.browser>firefox</driver.browser>
+				<env.platform>WINDOWS</env.platform>
+				<env.browserversion>35.0</env.browserversion>
+				<env.platform.version></env.platform.version>
+				<env.gridURL>http://10.13.42.72:4444/wd/hub</env.gridURL>
+			</properties>
+
+		</profile>
+
+		<profile>
+			<id>ul-local-firefox</id>
+			<activation>
+				<property>
+					<name>env</name>
+					<value>firefox-ul</value>
+				</property>
+			</activation>
+			<properties>
+				<env.tfs>http://cwsource01:8080/tfs/UL Knowledge Services</env.tfs>
+				<env.tfsProjectLocationPrefix>$/TestNG/DEV/UITestAutomation/</env.tfsProjectLocationPrefix>
+				<env.banner>ComplianceWire</env.banner>
+				<env.execType>local</env.execType>
+				<env.tools>http://selenium01:9000</env.tools>
+				<env.infoScreenshots>false</env.infoScreenshots>
+				<env.url>https://nextnb.compliancewire.com</env.url>
+				<driver.browser>firefox</driver.browser>
+				<env.platform>MAC_OSX</env.platform>
+				<env.browserversion>54</env.browserversion>
+				<env.platform.version>7</env.platform.version>
+				<env.gridURL>local</env.gridURL>
+			</properties>
+
+		</profile>
+
+		<profile>
+			<id>NEXTNB_PARALLEL_CHROME</id>
+			<activation>
+				<property>
+					<name>env</name>
+					<value>NEXTNB_PARALLEL_CHROME</value>
+				</property>
+			</activation>
+			<properties>
+				<env.tfs>http://cwsource01:8080/tfs/UL Knowledge Services</env.tfs>
+				<env.tfsProjectLocationPrefix>$/TestNG/DEV/TestAutomation/</env.tfsProjectLocationPrefix>
+				<env.banner>ComplianceWire</env.banner>
+			<!-- vevin local screeshot server	<env.screenshotserver>10.13.66.120:8080</env.screenshotserver> -->
+				<env.screenshotserver>10.13.42.72:8081</env.screenshotserver>
+				<!-- <env.screenshotserver>10.13.66.120:8080</env.screenshotserver> -->
+				<env.infoScreenshots>true</env.infoScreenshots>
+				<env.reportingserver>jenkins01:1337</env.reportingserver>
+				<env.execType>local</env.execType>
+				<env.url>https://nextnb.compliancewire.com</env.url>
+				<env.tools>http://selenium01:9000</env.tools>
+				<driver.browser>chrome</driver.browser>
+				<env.platform>WINDOWS</env.platform>
+				<env.browserversion>62</env.browserversion>
+				<env.platform.version>7</env.platform.version>
+				<env.gridURL>local</env.gridURL>
+			</properties>
+		</profile>
+		<profile>
+			<id>NEXTNB_CHROME</id>
+			<activation>
+				<property>
+					<name>env</name>
+					<value>NEXTNB_CHROME</value>
+				</property>
+			</activation>
+			<properties>
+				<env.banner>ComplianceWire</env.banner>
+				<env.tfs>http://cwsource01:8080/tfs/UL Knowledge Services</env.tfs>
+				<env.tfsProjectLocationPrefix>$/TestNG/DEV/TestAutomation/</env.tfsProjectLocationPrefix>
+				<env.url>https://nextnb.compliancewire.com</env.url>
+				<env.reportingserver>jenkins01:1337</env.reportingserver>
+				<env.screenshotserver>10.9.136.100:8080</env.screenshotserver>
+				<!-- <env.screenshotserver>10.13.42.72:8081</env.screenshotserver> -->
+				<env.execType>grid</env.execType>
+				<env.infoScreenshots>false</env.infoScreenshots>
+				<driver.browser>chrome</driver.browser>
+				<env.tools>http://selenium01:9000</env.tools>
+				<env.platform>WINDOWS</env.platform>
+				<env.browserversion>62</env.browserversion>
+				<env.platform.version>7</env.platform.version>
+				<env.gridURL>http://10.13.42.72:4444/wd/hub</env.gridURL>
+			</properties>
+		</profile>
+
+
+
+
+
+	</profiles>
+
+</project>
