@@ -9,19 +9,28 @@ import initializer.DynamicDataProvider;
 public class TestCase19724 extends BaseTest {
 	private static final Logger logger = Logger.getLogger(TestCase19724.class);
 
-	@Test(priority = 1, alwaysRun = true, dataProviderClass = DynamicDataProvider.class, dataProvider = "createAdminUser", description = "Options_Password policies_Restrict reuse of passwords", groups = {
+	@Test(priority = 1, alwaysRun = true, description = "Password policies will be defined to restrict the reuse of passwords", groups = {
 			"cfr_f", "cfr_f.passwordpolicies" })
-	public void Options_Password_policies_Restrict_reuse_of_passwords(String userName) throws Exception {
+	public void Options_Password_policies_Restrict_reuse_of_passwords() throws Exception {
 
-		loginPage.signIn(userName, getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE"));
+		addToStorage("adminUser",
+				getRandomEntityID().substring(0, 7) + getRandomEntityID().substring(0, 5) + "_AdminUsr");
+		loginPage
+				.signIn(getData("GENERIC.USER"), getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE"))
+				.openToolsMenu().openUsersPage().openAddUser()
+				.addANewUser(getFromStorage("adminUser") + "fn", getFromStorage("adminUser") + "ln",
+						getFromStorage("adminUser"), getData("GENERIC.TOP_ORGANIZATION"))
+				.openSecurityRoles().openAssignSecurityRole()
+				.assignRole(getData("GENERIC.TOP_ORGANIZATION"), getData("GENERIC.ROLE_ADMIN")).logOut()
+				.signIn(getFromStorage("adminUser"), getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE"));
 		Assert(homePage.isHomePage(), "Admin user will be able to login successfully");
 		homePage.openToolsMenu().openUsersPage();
-		usersPage.searchUser(userName).openSecurityRoles();
-		Assert(true, "Precondition: Admin User");
+		usersPage.searchUser(getFromStorage("adminUser")).openSecurityRoles();
+		Assert(userManagementPage.openSecurityRoles().getSecurityRole().contains("Organization Administrator"), "Precondition: Admin User -" + getFromStorage("adminUser"));
 		usersPage.openOptionsPage().openPasswordPolicies();
 		Assert(definePasswordPoliciesPage.isDefinePasswordPoliciesPage(), "Password policies page should be displayed");
 		definePasswordPoliciesPage.openEditPasswordPolicies().setReusePwdPolicy("2").saveChanges();
-		Assert(definePasswordPoliciesPage.getReusePwdPolicy().contains("Do not allow reuse of the past"),
+		Assert(definePasswordPoliciesPage.getReusePwdPolicy(),("Do not allow reuse of the past"),
 				"The Password policies will be defined to not allow reuse of a selected number of passwords");
 		definePasswordPoliciesPage.knowledgeCenter().openUserProfile().openChangePwdPage()
 				.changePassword(getData("GENERIC.PASSWORD"), "ABC1", "ABC1");

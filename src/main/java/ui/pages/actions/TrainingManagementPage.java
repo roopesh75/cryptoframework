@@ -2,6 +2,7 @@ package ui.pages.actions;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.openqa.selenium.Keys;
@@ -34,6 +35,7 @@ public class TrainingManagementPage extends TrainingManagementPageRepo
 		content_TrainingManagementPageSection = new TrainingManagementPageSection_Content(driver);
 		trainingNavigation_TrainingManagementPageSection = new TrainingManagementPageSection_TrainingNavigation(driver);
 		searchForTrainingOverlay = new SearchForTrainingOverlay(driver);
+
 		adminNav_CommonSection = new AdminNav_CommonSection(driver);
 		trainingManagementPage_ManageTrainingTypesOverlay = new TrainingManagementPage_ManageTrainingTypesOverlay(
 				driver);
@@ -48,14 +50,26 @@ public class TrainingManagementPage extends TrainingManagementPageRepo
 		return trainingNavigation_TrainingManagementPageSection.openGeneralInformation();
 
 	}
+	public AssignmentPage openAssignmentPage() {
+		return adminNav_CommonSection.openAssignmentPage();
+
+	}
 
 	public TrainingManagementPage openOrganizations() {
 		return trainingNavigation_TrainingManagementPageSection.openOrganizations();
 
 	}
 
-	public TrainingPage closeSearchTrainingOverlay() {
+	public TrainingManagementPage closeSearchTrainingOverlay() {
 		return searchForTrainingOverlay.closeSearchTrainingOverlay();
+	}
+
+	public TrainingManagementPage searchTraining(String trainingCode) {
+		return searchForTrainingOverlay.searchTraining(trainingCode);
+	}
+
+	public TrainingManagementPage chooseVersion(String trainingCode, String version) {
+		return searchForTrainingOverlay.chooseVersion(trainingCode, version);
 	}
 
 	public TrainingPage openReturn() {
@@ -78,6 +92,14 @@ public class TrainingManagementPage extends TrainingManagementPageRepo
 		returnlnk().click();
 		return new TrainingPage(driver);
 	}
+	public TrainingManagementPage returnFromQuizRevision() {
+		returnlnk().click();
+		return this;
+	}
+
+	public String getReturnedRecordsCount() {
+		return rowsReturned().getText();
+	}
 
 	public TrainingPage returnFromAssignmentOrCompletionReport() {
 		recordScreenIframeSwitch();
@@ -96,13 +118,15 @@ public class TrainingManagementPage extends TrainingManagementPageRepo
 	}
 
 	public String getSigniture() {
-		// TODO Auto-generated method stub
 		return content_TrainingManagementPageSection.getSigniture();
 	}
 
-	public TrainingManagementPageSection_Content openHistory() {
-		// TODO Auto-generated method stub
+	public TrainingManagementPage openHistory() {
 		return trainingNavigation_TrainingManagementPageSection.openHistory();
+	}
+
+	public QuizPage openQuiz() {
+		return trainingNavigation_TrainingManagementPageSection.openQuiz();
 	}
 
 	public ClassesPage openClasses() {
@@ -122,7 +146,10 @@ public class TrainingManagementPage extends TrainingManagementPageRepo
 		adminNav_CommonSection.openUsersPage();
 		return new UsersPage(driver);
 	}
-
+	public AssignmentPage openAssignmentsPage() {
+		adminNav_CommonSection.openAssignmentPage();
+		return new AssignmentPage(driver);
+	}
 	public AddClassPage openAddClass() {
 		return trainingNavigation_TrainingManagementPageSection.openAddClass();
 
@@ -134,6 +161,12 @@ public class TrainingManagementPage extends TrainingManagementPageRepo
 
 	public String getDescriptionHistory() {
 		return content_TrainingManagementPageSection.getDescriptionHistory();
+
+	}
+
+
+	public String getWebAddress() {
+		return content_TrainingManagementPageSection.getWebAddress();
 
 	}
 
@@ -166,6 +199,14 @@ public class TrainingManagementPage extends TrainingManagementPageRepo
 		return content_TrainingManagementPageSection.getTrainingType();
 	}
 
+	public String getCompletionType() {
+		return content_TrainingManagementPageSection.getCompletionType();
+	}
+
+	public String getCompletionExpires() {
+		return content_TrainingManagementPageSection.getCompletionExpires();
+	}
+
 	public TrainingManagementPage openCompletionReport(String reportName) {
 		findByLinkText(reportName).click();
 		return new TrainingManagementPage(driver);
@@ -193,6 +234,33 @@ public class TrainingManagementPage extends TrainingManagementPageRepo
 
 	}
 
+	public TrainingManagementPage incompleteUpdateCompletion() {
+		popUpIframeViaRecordScreenIframeSwitch();
+		new Select(completionDrpdwn()).selectByValue("1");
+		recordScreenIframeSwitch();
+		updateCompletionLnk().click();
+		return this;
+	}
+
+	public TrainingManagementPage enterManageCompletionFields() {
+		popUpIframeViaRecordScreenIframeSwitch();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy ");
+		Date date = new Date();
+		String date1 = dateFormat.format(date);
+		completionDate().clear();
+		completionDate().sendKeys(date1);
+		completionDate().click();
+		return this;
+	}
+
+	public String getCompletion() {
+		return new Select(completionDrpdwn()).getFirstSelectedOption().getText();
+	}
+
+	public String getExpirationDate() {
+		return expirationDate().getAttribute("value");
+	}
+
 	public TrainingManagementPage selectRosterHistory(String... parameters) {
 		new Select(rosterSltBox()).selectByVisibleText(parameters[0]);
 		return new TrainingManagementPage(driver);
@@ -201,6 +269,13 @@ public class TrainingManagementPage extends TrainingManagementPageRepo
 
 	public String getTrainingStatusOnRosterOrCurriculum(int index) {
 		return rosterTrainingCompletionStatusLbl(index).getText();
+	}
+
+	public TrainingManagementPage openIncompleteStatus() {
+		recordScreenIframeSwitch();
+		staticWait(10000);
+		incompleteLnk().click();
+		return this;
 	}
 
 	public String getCurrentRosterView() {
@@ -247,6 +322,10 @@ public class TrainingManagementPage extends TrainingManagementPageRepo
 
 	}
 
+	public LoginPage logOut() {
+		return adminNav_CommonSection.logOut();
+	}
+
 	public TrainingManagementPage activateTraining() {
 		return trainingManagementPage_ManageTrainingTypesOverlay.activateTraining();
 	}
@@ -264,13 +343,17 @@ public class TrainingManagementPage extends TrainingManagementPageRepo
 
 	}
 
-	public TrainingManagementPage addQuestionAnswer(String Question, String answer) {
+	public TrainingManagementPage addQuestionAnswer(String...parameters) {
 		popUpIframeViaRecordScreenIframeSwitch();
 		switchToFrame("ifrmEditor");
 		switchToFrame("InfraWebHtmlEditor_tw");
-		findByCssSelector("body").sendKeys(Question);
+		findByCssSelector("body").sendKeys(parameters[0]);
 		popUpIframeViaRecordScreenIframeSwitch();
-		answerTextAreaTxtArea().sendKeys(answer);
+		answerTextAreaTxtArea().sendKeys(parameters[1]+Keys.ENTER);
+		if (parameters.length>2) {
+			answerTextAreaTxtArea().sendKeys(parameters[2]+Keys.ENTER);
+			answerTextAreaTxtArea().sendKeys(parameters[3]+Keys.ENTER);
+		}
 		return this;
 	}
 
@@ -280,9 +363,14 @@ public class TrainingManagementPage extends TrainingManagementPageRepo
 		return this;
 	}
 
-	public String getFormItems() {
+	public String getPRINTTableBorder() {
 		recordScreenIframeSwitch();
 		return TableTxt().getText();
+	}
+
+	public String getPRINTTableBorder(int index) {
+		recordScreenIframeSwitch();
+		return TableIndexTxt(index).getText();
 	}
 
 	public String getSingleResponseWindowTitle() {
@@ -296,8 +384,22 @@ public class TrainingManagementPage extends TrainingManagementPageRepo
 	}
 
 	public String getComments() {
-		// TODO Auto-generated method stub
 		return content_TrainingManagementPageSection.getComments();
+	}
+
+	public ControlDocumentTrainingPage openCreateNewVersion() {
+		trainingNavigation_TrainingManagementPageSection.openCreateNewVersion();
+		return new ControlDocumentTrainingPage(driver);
+	}
+
+	public String getCategory() {
+
+		return content_TrainingManagementPageSection.getCategory();
+	}
+
+	public String getLanguage() {
+
+		return content_TrainingManagementPageSection.getLanguage();
 	}
 
 	public TrainingManagementPage openRoster() {
@@ -373,14 +475,13 @@ public class TrainingManagementPage extends TrainingManagementPageRepo
 
 	}
 
-	
 	public List<String> getTrainingToAdd(int index) {
 		recordScreenIframeSwitch();
 		Select selectedTrainings = new Select(trainingToAddDrpdwn());
 		List<String> arrList = new ArrayList<String>();
 		String[] trainingTitle;
 		for (int i = 0; i < selectedTrainings.getOptions().size(); i++) {
-			trainingTitle=selectedTrainings.getOptions().get(i).getText().split(" ");
+			trainingTitle = selectedTrainings.getOptions().get(i).getText().split(" ");
 			arrList.add(trainingTitle[0]);
 		}
 		return arrList;
@@ -391,5 +492,90 @@ public class TrainingManagementPage extends TrainingManagementPageRepo
 		DateModified().click();
 		return this;
 	}
+
+	public ViewCurriculumPage openManageStatus() {
+		return trainingNavigation_TrainingManagementPageSection.openManageStatus();
+
+	}
+
+	public String getAbbreviation() {
+		return content_TrainingManagementPageSection.getAbbreviation();
+
+	}
+
+	public TrainingManagementPage openEquivalancies() {
+		return trainingNavigation_TrainingManagementPageSection.openEquivalancies();
+
+	}
+
+	public TrainingManagementPage openAddTrainingItemEquivalency() {
+		return trainingNavigation_TrainingManagementPageSection.openAddTrainingItemEquivalency();
+	}
+
+	public String getContentScreenTitle() {
+		return content_TrainingManagementPageSection.getContentScreenTitle();
+	}
+
+	public String getResultsFromSearchOverlay() {
+		return searchForTrainingOverlay.getResultsFromSearchOverlay();
+	}
+
+	public String getTrainingEquivalencyAddedTime() {
+		return trainingEquivalencyAddedTimeLbl().getText();
+	}
+
+	public TrainingManagementPage openTrainingType(String trainingType) {
+		recordScreenIframeSwitch();
+		findByLinkText(trainingType).click();
+		return this;
+	}
+
+	public TrainingManagementPage openDisabledTrainingTypes() {
+		trainingNavigation_TrainingManagementPageSection.openDisabledTrainingTypes();
+		return this;
+	}
+
+	public TrainingManagementPage makeDisabled() {
+		recordScreenIframeSwitch();
+		disableTrainingLnk().click();
+		acceptAlert();
+		return this;
+	}
+
+	public TrainingManagementPage makeEnabled() {
+		enableTrainingLnk().click();
+		return this;
+	}
+
+	public TrainingManagementPage openEnabledTrainingTypes() {
+		trainingNavigation_TrainingManagementPageSection.openEnabledTrainingTypes();
+		return this;
+	}
+
+	public TrainingManagementPage openAddTrainingType() {
+		trainingNavigation_TrainingManagementPageSection.openAddTrainingType();
+		return this;
+	}
+
+	public TrainingManagementPage addTrainingType(String... parameters) {
+		popUpIframeViaRecordScreenIframeSwitch();
+		new Select(systemTypeSltBox()).selectByVisibleText(parameters[0]);
+		typeNameTxtBox().sendKeys(parameters[1]);
+		abbrTxtBox().sendKeys(parameters[2]);
+		recordScreenIframeSwitch();
+		createTrainingTypeLnk().click();
+		return this;
+	}
+
+	public boolean isManageTrainingTypePage() {
+		// TODO Auto-generated method stub
+		return trainingNavigation_TrainingManagementPageSection.isManageTrainingTypePage();
+	}
+
+	public String getContentManageTrainingTypes() {
+		popUpIframeViaRecordScreenIframeSwitch();
+		return eduBodyTxt().getText();
+	}
+
 
 }

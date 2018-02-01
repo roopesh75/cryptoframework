@@ -53,7 +53,7 @@ public class DefinePasswordPoliciesPage extends DefinePasswordPoliciesPageRepo i
 	}
 
 	
-	public IESigOverlay electonicallySignIn(String...parameters) {
+	public IESigOverlay electronicallySignIn(String...parameters) {
 		return esignatureDefinePasswordPoliciesPageOverlay.electronicallySignIn(parameters[0],parameters[1],parameters[2],parameters[3]);
 	}
 

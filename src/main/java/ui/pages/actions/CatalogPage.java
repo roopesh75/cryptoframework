@@ -54,7 +54,7 @@ public class CatalogPage extends CatalogPageRepo implements IESigOverlay {
 		return esignatureCatalogPageOverlay.getEsignatureOverlay(frameName);
 	}
 
-	public IESigOverlay electonicallySignIn(String... parameters) {
+	public IESigOverlay electronicallySignIn(String... parameters) {
 		return esignatureCatalogPageOverlay.electronicallySignIn(parameters[0], parameters[1], parameters[2],
 				parameters[3]);
 	}
@@ -65,15 +65,29 @@ public class CatalogPage extends CatalogPageRepo implements IESigOverlay {
 	}
 
 	public CatalogPage completeCustomExam() {
+		scrollDown();
 		launchlnk().click();
 		continuebtn().click();
 		trueOption().click();
 		continuebtn().click();
-		// continuebtn().click();
+		waitForAjax("waiting for esign page");
 		return this;
 	}
-
+	public CatalogPage completeFormWithQuestions() {
+		scrollDown();
+		launchlnk().click();
+		formanswer("0").click();
+		formanswer("1").click();
+		continueLnk().click();
+		return this;
+	}
+	
+	public CatalogPage recordCompletionFormWithQuestions() {
+		continueLnk().click();
+		return this;
+	}
 	public boolean isEsignatureWindow() {
+		waitUntilElementDisplayed(userIDtxt());
 		return userIDtxt().isDisplayed();
 	}
 
@@ -84,6 +98,7 @@ public class CatalogPage extends CatalogPageRepo implements IESigOverlay {
 	}
 
 	public CatalogPage electronicallySign(String userName, String password) {
+		waitUntilElementDisplayed(userIDtxt());
 		userIDtxt().sendKeys(userName);
 		pwdtxt().clear();
 		pwdtxt().sendKeys(password);
@@ -105,6 +120,8 @@ public class CatalogPage extends CatalogPageRepo implements IESigOverlay {
 		
 		waitForAjax("catalog page");
 	//	staticWait(1000);
+	
 		return catalogPageContent().getText();
 	}
+
 }

@@ -15,23 +15,33 @@ import initializer.DynamicDataProvider;
 public class TestCase19722 extends BaseTest {
 	private static final Logger logger = Logger.getLogger(TestCase19722.class);
 
-	@Test(priority = 5, alwaysRun = true, dataProviderClass = DynamicDataProvider.class, dataProvider = "createAdminUser",
-			description = "Options_Password policies_change password length", groups = {"cfr_f", "cfr_f.passwordpolicies" 
+	@Test(priority = 5, alwaysRun = true, 
+			description = "User is able to define password lengths", groups = {"cfr_f", "cfr_f.passwordpolicies" 
 			 })
-	public void Options_PasswordPolicies_ChangePasswordLength(String userName) throws Exception {
-		loginPage.signIn(userName, getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE"));
+	public void Options_PasswordPolicies_ChangePasswordLength() throws Exception {
+		addToStorage("adminUser",
+				getRandomEntityID().substring(0, 7) + getRandomEntityID().substring(0, 5) + "_AdminUsr");
+		loginPage
+				.signIn(getData("GENERIC.USER"), getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE"))
+				.openToolsMenu().openUsersPage().openAddUser()
+				.addANewUser(getFromStorage("adminUser") + "fn", getFromStorage("adminUser") + "ln",
+						getFromStorage("adminUser"), getData("GENERIC.TOP_ORGANIZATION"))
+				.openSecurityRoles().openAssignSecurityRole()
+				.assignRole(getData("GENERIC.TOP_ORGANIZATION"), getData("GENERIC.ROLE_ADMIN")).logOut()
+				.signIn(getFromStorage("adminUser"), getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE"));
 		Assert(homePage.isHomePage(), "Admin user will be able to login successfully");
 		homePage.openToolsMenu().openUsersPage();
-		usersPage.searchUser(userName).openSecurityRoles();
-		Assert(true, "Precondition: Admin User");
+		usersPage.searchUser(getFromStorage("adminUser")).openSecurityRoles();
+		Assert(userManagementPage.openSecurityRoles().getSecurityRole().contains("Organization Administrator"), "Precondition: Admin User -" + getFromStorage("adminUser"));
 		usersPage.openOptionsPage();
 		Assert(optionsPage.isOptionsPage(), "Admin user will be navigated to Options tab");
 		optionsPage.openPasswordPolicies();
 		Assert(definePasswordPoliciesPage.isDefinePasswordPoliciesPage(),
 				"Admin user will be navigated to Define Password Policies page");
 		definePasswordPoliciesPage.openEditPasswordPolicies().setMinPwdLength("3").setMaxPwdLength("8").saveChanges();
-		Assert(definePasswordPoliciesPage.getPasswordLengths().contains("Passwords must be at least 3 Character(s) long")
-				&& definePasswordPoliciesPage.getPasswordLengths().contains("Passwords cannot be longer than 8 Character(s)"),
+		Assert(definePasswordPoliciesPage.getPasswordLengths(),("Passwords must be at least 3 Character(s) long"),
+				"Minimum and maximum password lengths will be set.");
+		Assert(definePasswordPoliciesPage.getPasswordLengths(),("Passwords cannot be longer than 8 Character(s)"),
 				"Minimum and maximum password lengths will be set.");
 		optionsPage.openSupport().openUserProfile().openChangePwdPage();
 		Assert(changePasswordPage.isPwdPoliciesPage(),
@@ -42,7 +52,7 @@ public class TestCase19722 extends BaseTest {
 		Assert(changePasswordPage.getAlertMessage().contains("Exceeds Maximum Length"),"Passwords that are longer than the maximum lengths will return a warning message");
 		changePasswordPage.changePassword(getData("GENERIC.PASSWORD"), "123B", "123B");
 		Assert(changePasswordPage.getSuccessMessage().contains("Your Password has been changed"), "The user's password will be changed to a new password");
-		changePasswordPage.continuePwd().logOut().signIn(userName, "123B", getData("GENERIC.AUTOMATION.COMPANYCODE"));
+		changePasswordPage.continuePwd().logOut().signIn(getFromStorage("adminUser"), "123B", getData("GENERIC.AUTOMATION.COMPANYCODE"));
 		Assert(homePage.isHomePage(), "User will logout and Login successfully. ");
 		
 		// cleaning the data

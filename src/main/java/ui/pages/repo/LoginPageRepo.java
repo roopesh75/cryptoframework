@@ -18,7 +18,7 @@ import java.util.List;
 public class LoginPageRepo extends UiBase {
 
     protected BrowserElement userNameBox() {
-        return (BrowserElement) getDriver().findElements(By.id("UserID")).get(0);
+        return (BrowserElement) getDriver().findElement(By.id("UserID"));
     }
 
     protected BrowserElement passwordBox() {

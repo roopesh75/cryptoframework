@@ -17,21 +17,35 @@ public class SearchForTrainingOverlay extends SearchForTrainingOverlayRepo imple
 	}
 
 	public TrainingManagementPage searchTraining(String trainingCode) {
-		recordScreenIframeSwitch();
+		popUpIframeViaRecordScreenIframeSwitch();
 		trainingCodeBox().sendKeys(trainingCode);
 		searchlnk().click();
 		return new TrainingManagementPage(driver);
 	}
-
+	public TrainingManagementPage chooseVersion(String trainingCode,String version){
+		popUpIframeViaRecordScreenIframeSwitch();
+		findByLinkText(trainingCode).click();
+		findByLinkText(version).click();
+		recordScreenIframeSwitch();
+		continuelnk().click();
+		return new TrainingManagementPage(driver);
+	}
+	
 	public String getSearchStatus() {
 		popUpIframeViaRecordScreenIframeSwitch();
 		return searchResultsTbl().getText();
 	}
 
-	public TrainingPage closeSearchTrainingOverlay() {
+	public TrainingManagementPage closeSearchTrainingOverlay() {
 		recordScreenIframeSwitch();
 		closeOverlay().click();
-		return new TrainingPage(driver);
+		return new TrainingManagementPage(driver);
+	}
+
+	@Override
+	public String getResultsFromSearchOverlay() {
+		popUpIframeViaRecordScreenIframeSwitch();
+		return tableResults().getText();
 	}
 
 }

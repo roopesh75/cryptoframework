@@ -14,12 +14,12 @@ public class TrainingManagementPageSection_Content extends Content_TrainingManag
 		setDriver(driver);
 	}
 
-	public void getFirstName() {
-
-	}
-
 	public String getDescription() {
 		return description().getText();
+	}
+
+	public String getAbbreviation() {
+		return abbreviationTxt().getText();
 	}
 
 	public String getAllowOnlineRegistration() {
@@ -31,17 +31,19 @@ public class TrainingManagementPageSection_Content extends Content_TrainingManag
 	}
 
 	public List<String> getDates() {
-		return datesTxt().stream().map(e -> e.getText()).collect(Collectors.toList());
+		List<String> dates = datesTxt().stream().map(e -> e.getText()).collect(Collectors.toList());
+		dates.remove(0);
+		return dates;
 	}
 
 	public String getDescriptionHistory() {
-		// TODO Auto-generated method stub
-		return historyTbl(2).getText();
-	}
-
-	public String getCommentHistory() {
-		// TODO Auto-generated method stub
 		return historyTbl(3).getText();
+	}
+	public String getQuizRevisionPageContent() {
+		return quizRevisionPage().getText();
+	}
+	public String getCommentHistory() {
+		return historyTbl(4).getText();
 	}
 
 	public String getCompletionDate() {
@@ -55,12 +57,10 @@ public class TrainingManagementPageSection_Content extends Content_TrainingManag
 	}
 
 	public String getCompletionDateTimeZone() {
-		// TODO Auto-generated method stub
 		return completionDateTimeZoneTxt().getAttribute("title");
 	}
 
 	public String getSignatureTimeZone() {
-		// TODO Auto-generated method stub
 		return signatureTimeZoneTxt().getAttribute("title");
 	}
 
@@ -82,10 +82,55 @@ public class TrainingManagementPageSection_Content extends Content_TrainingManag
 		return trainingTitle().getText().trim();
 
 	}
+	
 
 	public String getComments() {
-		// TODO Auto-generated method stub
 		return commentsTxt().getText();
+	}
+
+	public String getLanguage() {
+		return languageTxt().getText();
+	}
+
+	public String getWebAddress() {
+		return webAddressTxt().getText();
+	}
+
+	public String getEffectiveDate() {
+		return effectiveDateTxt().getText();
+	}
+
+	public String getApprovalDate() {
+		return approvalDateTxt().getText();
+	}
+
+	public String getVersionDescription() {
+		return versionDescriptionTxt().getText();
+	}
+
+	public String getCode() {
+		return codeTxt().getText();
+	}
+
+	public String getCategory() {
+		return categoryTxt().getText();
+	}
+
+	public String getCompletionType() {
+		recordScreenIframeSwitch();
+		return completionType().getText().trim();
+
+	}
+
+	public String getCompletionExpires() {
+		recordScreenIframeSwitch();
+		return completionExpires().getText().trim();
+
+	}
+
+	public String getContentScreenTitle() {
+		recordScreenIframeSwitch();
+		return contentScreenTitleLbl().getText();
 	}
 
 }

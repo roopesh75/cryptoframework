@@ -10,25 +10,32 @@ public class TestCase20206 extends BaseTest {
 
 	private static final Logger logger = Logger.getLogger(TestCase20206.class);
 
-	@Test(alwaysRun = true, dataProviderClass = DynamicDataProvider.class, dataProvider = "createAdminUser", description = "Add an Instructor Led Course training item and Add a class to an effective instructor led course training. Add users to an instructor led course roster through the use of keyword search", groups = {})
-	public void Training_ILC_Create_and_Add_a_class_users_to_class(String userName) throws Exception {
+	@Test(alwaysRun = true, description = 
+			"Add an Instructor Led Course training item and Add a class to an effective instructor led "
+			+ "course training. Add users to an instructor led course roster through the use of keyword search", groups = {"basic","basic.training"})
+	public void Training_ILC_Create_and_Add_a_class_users_to_class() throws Exception {
 		addToStorage("randomTag1", getRandomEntityID().substring(0, 5));
-		loginPage.signIn(userName, getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE"))
-				.openToolsMenu().openUsersPage().searchUser(userName).openSecurityRoles();
-		Assert(userManagementPage.getUserId(), userName, "Precondition: Admin User -" + userName);
+		addToStorage("adminUser",
+				getRandomEntityID().substring(0, 7) + getRandomEntityID().substring(0, 5) + "_AdminUsr");
+		loginPage
+				.signIn(getData("GENERIC.USER"), getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE"))
+				.openToolsMenu().openUsersPage().openAddUser()
+				.addANewUser(getFromStorage("adminUser") + "fn", getFromStorage("adminUser") + "ln",
+						getFromStorage("adminUser"), getData("GENERIC.TOP_ORGANIZATION"))
+				.openSecurityRoles().openAssignSecurityRole()
+				.assignRole(getData("GENERIC.TOP_ORGANIZATION"), getData("GENERIC.ROLE_ADMIN")).logOut()
+				.signIn(getFromStorage("adminUser"), getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE"))
+				.openToolsMenu().openUsersPage().searchUser(getFromStorage("adminUser")).openSecurityRoles();
+		Assert(userManagementPage.openSecurityRoles().getSecurityRole().contains("Organization Administrator"), "Precondition: Admin User -" + getFromStorage("adminUser"));
 		userManagementPage.returnFromUserManagement().openAddUser()
 				.addANewUser(getFromStorage("randomTag1") + "Usr11", getFromStorage("randomTag1") + "Usr11",
 						getFromStorage("randomTag1") + "Usr11", getData("TestCase19732.ORGANIZATION"))
-				.returnFromUserManagement().openAddUser()
-				.addANewUser(getFromStorage("randomTag1") + "Usr12", getFromStorage("randomTag1") + "Usr12",
+				.returnFromUserManagement().openAddUser().addANewUser(getFromStorage("randomTag1") + "Usr12", getFromStorage("randomTag1") + "Usr12",
 						getFromStorage("randomTag1") + "Usr12", getData("TestCase19732.ORGANIZATION"))
-				.returnFromUserManagement().openAddUser()
-				.addANewUser(getFromStorage("randomTag1") + "Usr@1", getFromStorage("randomTag1") + "Usr@1",
-						getFromStorage("randomTag1") + "Usr@1", getData("TestCase19732.ORGANIZATION"))
-				.returnFromUserManagement().openAddUser()
-				.addANewUser(getFromStorage("randomTag1") + "Usr@2", getFromStorage("randomTag1") + "Usr@2",
-						getFromStorage("randomTag1") + "Usr@2", getData("TestCase19732.ORGANIZATION"))
-				.returnFromUserManagement().openTrainingPage().openAddTrainingItem().openInstructorLedCourse()
+				.returnFromUserManagement().openAddUser().addANewUser(getFromStorage("randomTag1") + "Usr@1", getFromStorage("randomTag1") + "Usr@1",
+						getFromStorage("randomTag1") + "Usr@1", getData("TestCase19732.ORGANIZATION")).returnFromUserManagement().openAddUser().addANewUser(getFromStorage("randomTag1") + "Usr@2", getFromStorage("randomTag1") + "Usr@2",
+								getFromStorage("randomTag1") + "Usr@2", getData("TestCase19732.ORGANIZATION")).returnFromUserManagement().
+				openTrainingPage().openAddTrainingItem().openInstructorLedCourse()
 				.addInstructorLedCourse(getFromStorage("randomTag1") + "ILCtrng",
 						getFromStorage("randomTag1") + "ILCtrng", "Auto Polaris 2.0");
 

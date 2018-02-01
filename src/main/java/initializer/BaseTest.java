@@ -108,8 +108,13 @@ public abstract class BaseTest extends PageInitializer {
 				+ "FINAL RESULT STATUS" + " for " + result.getStatus());
 		if (result.getStatus() == ITestResult.FAILURE) {
 			if (result.getThrowable() != null) {
+				StringBuilder sBuilder=new StringBuilder();
+				for(StackTraceElement e :result.getThrowable().getStackTrace()){
+					sBuilder.append(e.toString()).append("<br>");
+				}
+				sBuilder.toString();
 				ExtentTestManager.getTest().fail(MarkupHelper.createLabel(
-						result.getName() + "<br>" + result.getThrowable() + "<br>Test Case Failed", ExtentColor.RED));
+						result.getName() + "<br>" +result.getThrowable()+"<br>"+ sBuilder + "<br>Test Case Failed", ExtentColor.RED));
 			} else {
 				ExtentTestManager.getTest()
 						.fail(MarkupHelper.createLabel(result.getName() + "<br>Test Case Failed", ExtentColor.RED));

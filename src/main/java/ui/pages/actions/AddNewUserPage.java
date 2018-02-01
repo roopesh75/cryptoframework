@@ -47,6 +47,7 @@ public class AddNewUserPage extends AddNewUserPageRepo {
 		}
 		recordScreenIframeSwitch();
 		save().click();
+		staticWait(2000);
 		return new UserManagementPage(driver);
 	}
 	
@@ -96,7 +97,7 @@ public class AddNewUserPage extends AddNewUserPageRepo {
 			lastName().sendKeys(parameters[1]);
 		}
 		saveChanges().click();
-		//staticWait(3000);
+		staticWait(2000);
 		switchToDefaultFrame();
 		return new UserManagementPage(driver);
 	}

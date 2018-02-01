@@ -11,17 +11,27 @@ public class TestCase19731 extends BaseTest {
 
 	private static final Logger logger = Logger.getLogger(TestCase19731.class);
 
-	@Test(alwaysRun = true, dataProviderClass = DynamicDataProvider.class, dataProvider = "createAdminUser", description = 
-			"Training_Security_rights_Curriculum_Quick_Reports", groups = {"cfr_f","cfr_f.training"})
-	public void Training_Security_rights_Curriculum_Quick_Reports(String userName) throws Exception {
+	@Test(alwaysRun = true, description = 
+			"User with appropriate security rights can create Curriculum Quick Reports.", groups = {"cfr_f","cfr_f.training"})
+	public void Training_Security_rights_Curriculum_Quick_Reports() throws Exception {
 		addToStorage("role", getSecurityRoleSeq()+getRandomEntityID().substring(0,5)+"_role");
 		
-		loginPage.signIn(userName, getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE"))
+		addToStorage("adminUser",
+				getRandomEntityID().substring(0, 7) + getRandomEntityID().substring(0, 5) + "_AdminUsr");
+		loginPage
+				.signIn(getData("GENERIC.USER"), getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE"))
+				.openToolsMenu().openUsersPage().openAddUser()
+				.addANewUser(getFromStorage("adminUser") + "fn", getFromStorage("adminUser") + "ln",
+						getFromStorage("adminUser"), getData("GENERIC.TOP_ORGANIZATION"))
+				.openSecurityRoles().openAssignSecurityRole()
+				.assignRole(getData("GENERIC.TOP_ORGANIZATION"), getData("GENERIC.ROLE_ADMIN")).logOut()
+				.signIn(getFromStorage("adminUser"), getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE"))
 				.openToolsMenu().openUsersPage();
 		
-		usersPage.searchUser(userName).openSecurityRoles();
-		Assert(userManagementPage.getUserId(),userName, "Precondition: Admin User");
-		usersPage.openTrainingPage().openAssignmentReportByTraining().runReportForCurriculum("Curriculum",getData("TC19731.CURRICULUM")+" ("+getData("TC19731.CURRICULUM")+")");
+		usersPage.searchUser(getFromStorage("adminUser")).openSecurityRoles();
+		Assert(userManagementPage.getUserId(),getFromStorage("adminUser"), "Precondition: Admin User");
+		usersPage.openTrainingPage().openAssignmentReportByTraining().
+		runReportForTrainingOrCurriculum("Curriculum",getData("TC19731.CURRICULUM")+" ("+getData("TC19731.CURRICULUM")+")");
 		Assert(trainingManagementPage.getReportTitle(),("Assignment Report by Training"), "Precondition: Assignment Report by Training");
 		trainingManagementPage.returnFromAssignmentOrCompletionReport().openCompletionReportByTraining().runReportForCurriculum("In Curriculum",getData("TC19731.CURRICULUM")+" ("+getData("TC19731.CURRICULUM")+")");
 		Assert(trainingManagementPage.getReportTitle(),("Completions Report by Training"), "Precondition: Completions Report by Training");	
@@ -33,7 +43,7 @@ public class TestCase19731 extends BaseTest {
 		openAddUser().addANewUser(getFromStorage("user")).returnFromUserManagement().
 		openSecurityRoles().chooseSecurityRole(getFromStorage("role")).
 		assignSecurityRoleToUsr(getFromStorage("user"),"true").selectUserToOverride(getFromStorage("user")).applySecurityRole();		
-		Assert(userManagementPage.getUsersInSecurityRole(),(getFromStorage("user")), "New security role is assigned to the user.");
+		Assert(userManagementPage.getPRINTTableBorder(),(getFromStorage("user")), "New security role is assigned to the user.");
 		addToStorage("reportName1", getRandomEntityID().substring(0,5)+"_rpt");
 		addToStorage("reportName2", getRandomEntityID().substring(0,5)+"_rpt");
 		userManagementPage.logOut()

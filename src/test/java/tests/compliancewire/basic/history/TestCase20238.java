@@ -6,16 +6,25 @@ import org.testng.annotations.Test;
 import initializer.BaseTest;
 import initializer.DynamicDataProvider;
 import ui.utils.Tools;
-
+//DELETED
 public class TestCase20238 extends BaseTest {
 
 	private static final Logger logger = Logger.getLogger(TestCase20238.class);
 
-	@Test(alwaysRun = true, dataProviderClass = DynamicDataProvider.class, dataProvider = "createAdminUser", description = "History report can be Sorted and viewed online", groups = {
+	@Test(alwaysRun = true,description = "History report can be Sorted and viewed online", groups = {
 			})
-	public void History_report_can_be_Sorted_and_viewed_online(String userName) throws Exception {
+	public void History_report_can_be_Sorted_and_viewed_online() throws Exception {
 		addToStorage("userInfo", getRandomEntityID().substring(0, 7));
-		loginPage.signIn(userName,  getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE"))
+		addToStorage("adminUser",
+				getRandomEntityID().substring(0, 7) + getRandomEntityID().substring(0, 5)+"_"+getClass().getSimpleName() + "_AdminUsr");
+		loginPage
+				.signIn(getData("GENERIC.USER"), getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE"))
+				.openToolsMenu().openUsersPage().openAddUser()
+				.addANewUser(getFromStorage("adminUser") + "fn", getFromStorage("adminUser") + "ln",
+						getFromStorage("adminUser"), getData("GENERIC.TOP_ORGANIZATION"))
+				.openSecurityRoles().openAssignSecurityRole()
+				.assignRole(getData("GENERIC.TOP_ORGANIZATION"), getData("GENERIC.ROLE_ADMIN")).logOut()
+				.signIn(getFromStorage("adminUser"),  getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE"))
 		.openToolsMenu().openUsersPage();
 		usersPage.searchUser(getData("TC20238.USER")).openSecurityRoles();
 		Assert(userManagementPage.getUserId(), getData("TC20238.USER"), "Precondition: User");

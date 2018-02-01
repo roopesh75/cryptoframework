@@ -34,6 +34,7 @@ public class LoginPage extends LoginPageRepo {
 	}
 
 	public LoginPage enterUserIDPwdInfo(String userId, String password) {
+		waitUntilElementDisplayed(userNameBox());
 		userNameBox().sendKeys(userId);
 		passwordBox().sendKeys(password);
 		return this;
@@ -49,6 +50,10 @@ public class LoginPage extends LoginPageRepo {
 		acceptBtn().click();
 		waitForAjax("clicked on AcceptBtn");
 		return new HomePage(driver);
+	}
+	
+	public String getacceptBtn() {
+		return acceptBtn().getAttribute("innerText");
 	}
 
 }

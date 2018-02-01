@@ -15,7 +15,9 @@ public class AdminNav_CommonSectionRepo extends UiBase {
 	protected BrowserElement knowledgeCenterlnk() {
 		return findByLinkText("Knowledge Center");
 	}
-
+	protected BrowserElement olKnowledgeCenterlnk() {
+		return findByLinkText(" ज्ञान केंद्र");
+	}
 	protected BrowserElement optionsLnk() {
 		return findByLinkText("Options");
 	}

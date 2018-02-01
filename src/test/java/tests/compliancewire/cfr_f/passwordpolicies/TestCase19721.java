@@ -15,21 +15,31 @@ import initializer.DynamicDataProvider;
 public class TestCase19721 extends BaseTest {
 	private static final Logger logger = Logger.getLogger(TestCase19721.class);
 
-	@Test(priority = 3, alwaysRun = true, dataProviderClass = DynamicDataProvider.class, dataProvider = "createAdminUser", description = "Options_Password Policies_Authentication", groups = {
+	@Test(priority = 3, alwaysRun = true, description = "Making a change to the password policies can require "
+					+ "authentication (electronic signature)", groups = {
 			"cfr_f", "cfr_f.passwordpolicies" })
-	public void Options_Password_Policies_Authentication(String userName) throws Exception {
+	public void Options_Password_Policies_Authentication() throws Exception {
 
-		loginPage.signIn(userName, getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE"));
+		addToStorage("adminUser",
+				getRandomEntityID().substring(0, 7) + getRandomEntityID().substring(0, 5) + "_AdminUsr");
+		loginPage
+				.signIn(getData("GENERIC.USER"), getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE"))
+				.openToolsMenu().openUsersPage().openAddUser()
+				.addANewUser(getFromStorage("adminUser") + "fn", getFromStorage("adminUser") + "ln",
+						getFromStorage("adminUser"), getData("GENERIC.TOP_ORGANIZATION"))
+				.openSecurityRoles().openAssignSecurityRole()
+				.assignRole(getData("GENERIC.TOP_ORGANIZATION"), getData("GENERIC.ROLE_ADMIN")).logOut()
+				.signIn(getFromStorage("adminUser"), getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE"));
 		Assert(homePage.isHomePage(), "Admin user will be able to login successfully");
 		homePage.openToolsMenu().openUsersPage();
-		usersPage.searchUser(userName).openSecurityRoles();
-		Assert(true, "Precondition: Admin User");
+		usersPage.searchUser(getFromStorage("adminUser")).openSecurityRoles();
+		Assert(userManagementPage.openSecurityRoles().getSecurityRole().contains("Organization Administrator"), "Precondition: Admin User -" + getFromStorage("adminUser"));
 		usersPage.openOptionsPage();
 		Assert(optionsPage.isOptionsPage(), "Admin user will be navigated to Options tab");
-		optionsPage.openEsignatureRequirements().openEditRequirements().uncheckReqEsigPasswordPolicies(userName,
+		optionsPage.openEsignatureRequirements().openEditRequirements().uncheckReqEsigPasswordPolicies(getFromStorage("adminUser"),
 				getData("GENERIC.PASSWORD"), getData("TC19721.SIGNATUREREASON"), "RecScr");
 		esignatureRequirementsPage.openEditRequirements().checkReqEsigPasswordPolicies().saveChanges()
-				.electronicallySignIn(userName, getData("GENERIC.PASSWORD"), getData("TC19721.SIGNATUREREASON"),
+				.electronicallySignIn(getFromStorage("adminUser"), getData("GENERIC.PASSWORD"), getData("TC19721.SIGNATUREREASON"),
 						"RecScr");
 
 		Assert(esignatureRequirementsPage.getEsignatureRequirements(9).contains("images/Checked.jpg"),
@@ -42,21 +52,21 @@ public class TestCase19721 extends BaseTest {
 				"e-Signature Required popup window will be displayed");
 		Assert(esignatureRequirementsPage.getPwdBoxAttribute().equalsIgnoreCase("password"),
 				"On entering Password for e-signature, password will be displayed in encrypted form");
-		definePasswordPoliciesPage.electonicallySignIn(userName, getData("GENERIC.PASSWORD"),
+		definePasswordPoliciesPage.electronicallySignIn(getFromStorage("adminUser"), getData("GENERIC.PASSWORD"),
 				getData("TC19721.SIGNATUREREASON"), "RecScr");
-		optionsPage.openLogsPage().openEventLogReport().selectEvent("61").openRunThisReport().sortByDateTime()
+		optionsPage.openLogsPage().openEventLogReport().addUsr(getFromStorage("adminUser")).selectEvent("61").openRunThisReport().sortByDateTime()
 				.sortByDateTime();
 		Assert(eventLogReportPage.getEventLogTopRow().contains("Password Policy Updated")
-				&& eventLogReportPage.getEventLogTopRow().contains(userName)
-				&& eventLogReportPage.getEventLogTopRow().contains("Pinaa")
-				&& eventLogReportPage.getEventLogTopRow().contains("Genz"),
+				&& eventLogReportPage.getEventLogTopRow().contains(getFromStorage("adminUser"))
+				&& eventLogReportPage.getEventLogTopRow().contains(getFromStorage("adminUser") + "fn")
+				&& eventLogReportPage.getEventLogTopRow().contains(getFromStorage("adminUser") + "ln"),
 
 				"The Password policy Update event will be displayed with date/time stamp based on User's PC Time Zone.");
 		// &&eventLogReportPage.getEventLogTopRow().contains(Tools.getDateTime())
 		// ,
 		// cleaning the data
 		logsPage.openOptionsPage().openEsignatureRequirements().openEditRequirements()
-				.uncheckReqEsigPasswordPolicies(userName, getData("GENERIC.PASSWORD"),
+				.uncheckReqEsigPasswordPolicies(getFromStorage("adminUser"), getData("GENERIC.PASSWORD"),
 						getData("TC19721.SIGNATUREREASON"), "RecScr")
 				.returnOptionsPage().openPasswordPolicies().openEditPasswordPolicies().setMinPwdLength("1")
 				.saveChanges();

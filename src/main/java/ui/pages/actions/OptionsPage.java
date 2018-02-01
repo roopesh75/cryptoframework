@@ -1,5 +1,4 @@
 package ui.pages.actions;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 
 import ui.BrowserDriver;
@@ -12,7 +11,8 @@ public class OptionsPage extends OptionsPageRepo {
     BrowserDriver driver;
     OptionsPageSection_SetupOptions setupOptions_optionsPage;
     AdminNav_CommonSection adminNav_CommonSection;
-    public OptionsPage(BrowserDriver driver) {
+
+	public OptionsPage(BrowserDriver driver) {
         this.driver = driver;
         setupOptions_optionsPage = new OptionsPageSection_SetupOptions(driver);
         adminNav_CommonSection = new AdminNav_CommonSection(driver);
@@ -31,6 +31,12 @@ public class OptionsPage extends OptionsPageRepo {
     public EsignatureRequirementsPage openEsignatureRequirements() {
         return setupOptions_optionsPage.openEsignatureRequirements();
     }
+    public OptionsManagementPage openClassRoomOptions() {
+        return setupOptions_optionsPage.openClassRoomOptions();
+    }
+    public OptionsManagementPage openOrganizationNodeManagement() {
+        return setupOptions_optionsPage.openOrganizationNodeManagement();
+    }
     public LogsPage openLogsPage() {
 		adminNav_CommonSection.openLogsPage();
 		return new LogsPage(driver);
@@ -42,5 +48,10 @@ public class OptionsPage extends OptionsPageRepo {
     public TrainingPage openTrainingPage() {
 		adminNav_CommonSection.openTrainingPage();
 		return new TrainingPage(driver);
+	}
+    
+    public UsersPage openUsersPage() {
+		adminNav_CommonSection.openUsersPage();
+		return new UsersPage(driver);
 	}
 }

@@ -13,11 +13,17 @@ public class AddQuestionCustomExamPageRepo extends UiBase {
 	protected BrowserElement singleResponseLnk() {
 		return findByXpath("//button[@class='btn btn-block btn-question-type']");
 	}
+	protected BrowserElement multipleResponseLnk() {
+		return findByCssSelector("button[title='Add Multiple Response']");
+	}
 	protected BrowserElement questionOrder() {
 		return findByXpath("//label[@id='questionorder-toggle']");
 	}
 	protected BrowserElement questionPool() {
 		return findById("allow-pooling");
+	}
+	protected BrowserElement quizQuestionTxt() {
+		return findById("quiz-question-panel");
 	}
 	protected BrowserElement saveBtn() {
 		return findByXpath("//button[@class='btn btn-primary']");
@@ -34,11 +40,23 @@ public class AddQuestionCustomExamPageRepo extends UiBase {
 	protected BrowserElement questionTxt() {
 		return findById("Question");
 	}
+	protected BrowserElement randomizedSequenceRadio() {
+		return findByXpath("//label[@id='israndom']");
+	}
 	protected BrowserElement ansTxt(String index) {
 		return findById("ViewModel_MultipleChoiceQuestionAnswerViewModels_"+index+"__AnswerText");
 	}
+	protected BrowserElement ansMultipleResponseTxt(String index) {
+		return findById("ViewModel_MultipleResponseQuestionAnswerViewModels_"+index+"__AnswerText");
+	}
+	protected BrowserElement ansChkBox(String index) {
+		return findById("ViewModel_MultipleResponseQuestionAnswerViewModels_"+index+"__IsCorrect");
+	}
 	protected BrowserElement questionSaveBtn() {
 		return findByXpath("//button[@id='btn-save-multiplechoice']");
+	}
+	protected BrowserElement questionMultipleSaveBtn() {
+		return findByXpath("//button[@id='btn-save-multiplecorrect']");
 	}
 	protected BrowserElement cancelBtn() {
 		return findByXpath("//button[@class='btn btn-default']");

@@ -168,7 +168,7 @@ public class BrowserElementImpl implements BrowserElement {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].setAttribute('style', arguments[1]);", this.webElement,
                 "color: red; border: 2px solid red;");
-        if(true) {
+        if(false) {
             String screenShot = CaptureScreenShot.captureScreen(driver, CaptureScreenShot.generateFileName(methodName));
             String fileName = screenShot.split("\\\\")[screenShot.split("\\\\").length - 1];
             ExtentTestManager.getScreenShotLst().add(screenShot);

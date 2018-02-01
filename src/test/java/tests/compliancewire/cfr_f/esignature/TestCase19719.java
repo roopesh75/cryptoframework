@@ -18,56 +18,71 @@ import ui.utils.Tools;
 public class TestCase19719 extends BaseTest {
 	private static final Logger logger = Logger.getLogger(TestCase19721.class);
 
-	@Test(priority = 6, alwaysRun = true, dataProviderClass = DynamicDataProvider.class, dataProvider = "createAdminUser", description = "Options_e-signature_editing", groups = {
+	@Test(priority = 6, alwaysRun = true,
+			description = "Electronic signatures are comprised of signer info (First Name, Last Name, User ID), computer "
+					+ "generated date and time stamp when signature was executed, and the "
+					+ "meaning/reason associated with signature", groups = {
 			"cfr_f", "cfr_f.esignature" })
-	public void Options_esignature_editing(String userName) throws Exception {
-		loginPage.signIn(userName, getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE"));
+	public void Options_esignature_editing() throws Exception {
+		addToStorage("adminUser",
+				getRandomEntityID().substring(0, 7) + getRandomEntityID().substring(0, 5) + "_AdminUsr");
+		loginPage
+				.signIn(getData("GENERIC.USER"), getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE"))
+				.openToolsMenu().openUsersPage().openAddUser()
+				.addANewUser(getFromStorage("adminUser") + "fn", getFromStorage("adminUser") + "ln",
+						getFromStorage("adminUser"), getData("GENERIC.TOP_ORGANIZATION"))
+				.openSecurityRoles().openAssignSecurityRole()
+				.assignRole(getData("GENERIC.TOP_ORGANIZATION"), getData("GENERIC.ROLE_ADMIN")).logOut()
+				.signIn(getFromStorage("adminUser"), getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE"));
 		Assert(homePage.isHomePage(),true, "Admin user will be able to login successfully");
-		homePage.openToolsMenu().openUsersPage().searchUser(userName).openSecurityRoles();
-		Assert(userManagementPage.getUserId(), userName, "Precondition: Admin User");
+		homePage.openToolsMenu().openUsersPage().searchUser(getFromStorage("adminUser")).openSecurityRoles();
+		Assert(userManagementPage.getUserId(), getFromStorage("adminUser"), "Precondition: Admin User");
 		usersPage.openOptionsPage();
 		Assert(optionsPage.isOptionsPage(),true, "Admin user will be navigated to Options tab");
 		optionsPage.openEsignatureRequirements();
 		Assert(esignatureRequirementsPage.isEsignautreRequirementsPage(),true,
 				"Admin user will be navigated to e-Signature Requirements page");
-		esignatureRequirementsPage.openEditRequirements().uncheckReqEsigPasswordPolicies(userName,
+		esignatureRequirementsPage.openEditRequirements().uncheckReqEsigPasswordPolicies(getFromStorage("adminUser"),
 				getData("GENERIC.PASSWORD"), getData("TC19721.SIGNATUREREASON"), "RecScr");
 		esignatureRequirementsPage.openEditRequirements().checkReqEsigPasswordPolicies().saveChanges();
 		Assert(esignatureRequirementsPage.getEsignatureOverlay("RecScr"),("User Id"),
 				"e-Signature Required popup window will be displayed");
 		Assert(esignatureRequirementsPage.getPwdBoxAttribute(),("password"),
 				"On entering Password for e-signature, password will be displayed in encrypted form");
-		definePasswordPoliciesPage.electonicallySignIn(userName, getData("GENERIC.PASSWORD"),
+		definePasswordPoliciesPage.electronicallySignIn(getFromStorage("adminUser"), getData("GENERIC.PASSWORD"),
 				getData("TC19721.SIGNATUREREASON"), "RecScr");
 		addToStorage("systemTime", Tools.getDateTime("MM/dd/yyyy hh:mm:ss a"));
-		addToStorage("eSigPageTime", esignatureRequirementsPage.getEsignature(userName).split("-")[1].trim());
-		AssertTime("MM/dd/yyyy hh:mm:ss a",esignatureRequirementsPage.getEsignature(userName).split("-")[1].trim(),getFromStorage("systemTime"),
+		addToStorage("eSigPageTime", esignatureRequirementsPage.getEsignature(getFromStorage("adminUser")).split("-")[1].trim());
+		AssertTime("MM/dd/yyyy hh:mm:ss a",esignatureRequirementsPage.getEsignature(getFromStorage("adminUser")).split("-")[1].trim(),getFromStorage("systemTime"),
 				"Electronic signature comprised of signer information (First Name, Last Name, User ID), date and time stamp will display User's PC time zone, and reason associated with signature . PC SYSTEM TIME: "+ getFromStorage("systemTime"));
-		Assert(esignatureRequirementsPage.getEsignature(userName),("Genz"),"The electronic signature will be comprised of the signer information (First Name, Last Name, User ID), date and time stamp will display the User's PC time zone, and the meaning/reason associated with signature");
-		Assert(esignatureRequirementsPage.getEsignature(userName),("Pinaa"),"The electronic signature will be comprised of the signer information (First Name, Last Name, User ID), date and time stamp will display the User's PC time zone, and the meaning/reason associated with signature");
-		Assert(esignatureRequirementsPage.getEsignature(userName),(userName)
+		Assert(esignatureRequirementsPage.getEsignature(getFromStorage("adminUser")),
+				getFromStorage("adminUser")+"ln","The electronic signature will be comprised of the signer information (First Name, Last Name, User ID), date and time stamp will display the User's PC time zone, and the meaning/reason associated with signature");
+		Assert(esignatureRequirementsPage.getEsignature(getFromStorage("adminUser")),
+				getFromStorage("adminUser")+"fn","The electronic signature will be comprised of the signer information (First Name, Last Name, User ID), date and time stamp will display the User's PC time zone, and the meaning/reason associated with signature");
+		Assert(esignatureRequirementsPage.getEsignature(getFromStorage("adminUser")),
+				(getFromStorage("adminUser"))
 				,
 				"The electronic signature will be comprised of the signer information (First Name, Last Name, User ID), date and time stamp will display the User's PC time zone, and the meaning/reason associated with signature");	
-		Assert(esignatureRequirementsPage.getEsignature(userName),(getData("TC19721.SIGNATUREREASON"))
+		Assert(esignatureRequirementsPage.getEsignature(getFromStorage("adminUser")),(getData("TC19721.SIGNATUREREASON"))
 				,
 				"The electronic signature will be comprised of the signer information (First Name, Last Name, User ID), date and time stamp will display the User's PC time zone, and the meaning/reason associated with signature");	
-		optionsPage.openLogsPage().openEventLogReport().selectEvent("52").openRunThisReport().sortByDateTime()
+		optionsPage.openLogsPage().openEventLogReport().addUsr(getFromStorage("adminUser")).selectEvent("52").openRunThisReport().sortByDateTime()
 				.sortByDateTime();
 		Assert(eventLogReportPage.getEventLogTopRowTime(),(getFromStorage("eSigPageTime")),"The Event Log report with the 'e-signature applied' event is displayed with date/ time stamp based on User PC time zone.");				
 		
 		Assert(eventLogReportPage.getEventLogTopRow(),("e-Signature Applied")
                ,"The Event Log report with the 'e-signature applied' event is displayed with date/ time stamp based on User PC time zone.");
 		
-		Assert(eventLogReportPage.getEventLogTopRow(),(userName)
+		Assert(eventLogReportPage.getEventLogTopRow(),(getFromStorage("adminUser"))
               ,"The Event Log report with the 'e-signature applied' event is displayed with date/ time stamp based on User PC time zone.");
 
 		
-		Assert(eventLogReportPage.getEventLogTopRow(),("Pinaa")
+		Assert(eventLogReportPage.getEventLogTopRow(),getFromStorage("adminUser")+"fn"
               ,"The Event Log report with the 'e-signature applied' event is displayed with date/ time stamp based on User PC time zone.");
 
-		Assert(eventLogReportPage.getEventLogTopRow(),("Genz"),"The Event Log report with the 'e-signature applied' event is displayed with date/ time stamp based on User PC time zone.");
+		Assert(eventLogReportPage.getEventLogTopRow(),getFromStorage("adminUser")+"ln","The Event Log report with the 'e-signature applied' event is displayed with date/ time stamp based on User PC time zone.");
 		logsPage.openOptionsPage().openEsignatureRequirements().openEditRequirements().uncheckReqEsigPasswordPolicies(
-				userName, getData("GENERIC.PASSWORD"), getData("TC19721.SIGNATUREREASON"), "RecScr");
+				getFromStorage("adminUser"), getData("GENERIC.PASSWORD"), getData("TC19721.SIGNATUREREASON"), "RecScr");
 
 	}
 

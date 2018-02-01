@@ -52,7 +52,10 @@ public class ClassesPage extends ClassesPageRepo {
 		return trainingNavigation_TrainingManagementPageSection.openAddClass();
 
 	}
+	public TrainingManagementPage openRosterFromLnk() {
+		return trainingNavigation_TrainingManagementPageSection.openRoster();
 
+	}
 	public TrainingManagementPage openRoster() {
 		recordScreenIframeSwitch();
 		rosterLnk().click();

@@ -29,21 +29,23 @@ public class ControlDocumentTrainingPage extends ControlDocumentTrainingPageRepo
 	public TrainingManagementPage addControlDocumentTraining(String... parameters) {
 		/*
 		 * recordScreenIframeSwitch(); codeTxtbox().sendKeys(parameters[0]);
-		 * titleTxtbox().sendKeys(parameters[1]);
-		 * viewOrganizationTree().click(); switchToNewWindow();
-		 * findByLinkText(parameters[2]).click();
+		 * titleTxtbox().sendKeys(parameters[1]); viewOrganizationTree().click();
+		 * switchToNewWindow(); findByLinkText(parameters[2]).click();
 		 * continueAfterSelectLnk().click(); Set<String> allWindows =
-		 * getDriver().getWindowHandles(); for (String currentWindow :
-		 * allWindows) { driver.switchTo().window(currentWindow); }
+		 * getDriver().getWindowHandles(); for (String currentWindow : allWindows) {
+		 * driver.switchTo().window(currentWindow); }
 		 */
 		enterCodeTitleSelectOrganization(parameters[0], parameters[1], parameters[2]);
 		recordScreenIframeSwitch();
 		if (parameters.length > 3) {
 			webAddressTxtbox().sendKeys(parameters[3]);
 			testWebAddress();
+			
+			closeTestWebaddressBrowser();
+			recordScreenIframeSwitch();
 		}
 		new Select(selectLanguagedrp()).selectByValue("1");
-		save().click();
+		save("1").click();
 		return new TrainingManagementPage(driver);
 	}
 
@@ -51,13 +53,15 @@ public class ControlDocumentTrainingPage extends ControlDocumentTrainingPageRepo
 		recordScreenIframeSwitch();
 		codeTxtbox().sendKeys(parameters[0]);
 		titleTxtbox().sendKeys(parameters[1]);
-		viewOrganizationTree().click();
-		switchToNewWindow();
-		findByLinkText(parameters[2]).click();
-		continueAfterSelectLnk().click();
-		Set<String> allWindows = getDriver().getWindowHandles();
-		for (String currentWindow : allWindows) {
-			driver.switchTo().window(currentWindow);
+		if (parameters.length > 2) {
+			viewOrganizationTree().click();
+			switchToNewWindow();
+			findByLinkText(parameters[2]).click();
+			continueAfterSelectLnk().click();
+			Set<String> allWindows = getDriver().getWindowHandles();
+			for (String currentWindow : allWindows) {
+				driver.switchTo().window(currentWindow);
+			}
 		}
 		return this;
 	}
@@ -65,17 +69,20 @@ public class ControlDocumentTrainingPage extends ControlDocumentTrainingPageRepo
 	public ControlDocumentTrainingPage enterApprovalEffectiveDates() {
 		recordScreenIframeSwitch();
 		approveDateTxtbox().clear();
-		approveDateTxtbox().sendKeys(Tools.getCurrentDate());
+		approveDateTxtbox().sendKeys(Tools.getCurrentDate("MM/dd/yyyy"));
 		effectiveDateTxtbox().clear();
-		effectiveDateTxtbox().sendKeys(Tools.getCurrentDate());
+		effectiveDateTxtbox().sendKeys(Tools.getCurrentDate("MM/dd/yyyy"));
 		return this;
 	}
 
-	public ControlDocumentTrainingPage enterAssortedFields() {
+	public ControlDocumentTrainingPage enterAssortedFields(String... parameters) {
 		recordScreenIframeSwitch();
+		abbreviationTxt().sendKeys("abbr");
 		versionDescTxt().sendKeys("This is a new version");
-		new Select(selectCategorydrp()).selectByValue("8468");
-		new Select(selectLanguagedrp()).selectByValue("1");
+		new Select(selectCategorydrp(Integer.parseInt(parameters[0]))).selectByValue("8468");
+		if (selectLanguagedrp().isEnabled())
+			new Select(selectLanguagedrp()).selectByValue("1");
+
 		webAddressTxtbox().sendKeys("www.google.com");
 		descriptionTxt().sendKeys("This is a test to create Control Document");
 		courseCommentsBox().sendKeys("This is a sample comment while creating Control Document");
@@ -116,7 +123,7 @@ public class ControlDocumentTrainingPage extends ControlDocumentTrainingPageRepo
 		recordScreenIframeSwitch();
 		windowHandle = driver.getWindowHandle();
 		testWebAddresslnk().click();
-
+		staticWait(5000);
 		Set<String> allWindows = getDriver().getWindowHandles();
 		for (String currentWindow : allWindows) {
 			driver.switchTo().window(currentWindow);
@@ -125,7 +132,7 @@ public class ControlDocumentTrainingPage extends ControlDocumentTrainingPageRepo
 		return this;
 	}
 
-	public ControlDocumentTrainingPage closeTestWebaddressBowser() {
+	public ControlDocumentTrainingPage closeTestWebaddressBrowser() {
 
 		Set<String> allWindows = getDriver().getWindowHandles();
 		for (String currentWindow : allWindows) {
@@ -141,8 +148,7 @@ public class ControlDocumentTrainingPage extends ControlDocumentTrainingPageRepo
 	}
 
 	public String getTestWebAddressPageTitle() {
-		
-		return driver.getTitle();
+		return getDriver().getTitle();
 	}
 
 	public Boolean isControlDocumentPage() {
@@ -150,9 +156,9 @@ public class ControlDocumentTrainingPage extends ControlDocumentTrainingPageRepo
 		return codeTxtbox().isDisplayed();
 	}
 
-	public TrainingManagementPage saveControlDocument() {
+	public TrainingManagementPage saveControlDocument(String index) {
 		recordScreenIframeSwitch();
-		save().click();
+		save(index).click();
 		return new TrainingManagementPage(driver);
 	}
 

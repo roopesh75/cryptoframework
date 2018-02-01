@@ -4,17 +4,18 @@ import org.openqa.selenium.support.PageFactory;
 
 import ui.BrowserDriver;
 import ui.pages.actions.overlays.Esignature_DefinePasswordPoliciesPageOverlay;
+import ui.pages.actions.sections.AdminNav_CommonSection;
 import ui.pages.repo.eSignatureRequirementsPageRepo;
 
 public class EsignatureRequirementsPage extends eSignatureRequirementsPageRepo implements IESigOverlay {
 
 	BrowserDriver driver;
 	Esignature_DefinePasswordPoliciesPageOverlay esignatureEsignatureaRequirementsPageOverlay;
-
+	AdminNav_CommonSection adminNav_CommonSection;
 	public EsignatureRequirementsPage(BrowserDriver driver) {
 		this.driver = driver;
 		esignatureEsignatureaRequirementsPageOverlay = new Esignature_DefinePasswordPoliciesPageOverlay(driver);
-
+		adminNav_CommonSection = new AdminNav_CommonSection(driver);
 		setDriver(driver);
 		PageFactory.initElements(driver, this);
 	}
@@ -23,7 +24,7 @@ public class EsignatureRequirementsPage extends eSignatureRequirementsPageRepo i
 		recordScreenIframeSwitch();
 		return editRequirementslnk().isDisplayed();
 	}
-
+	
 	public EsignatureRequirementsPage openEditRequirements() {
 		recordScreenIframeSwitch();
 		// staticWait(1000);
@@ -73,6 +74,20 @@ public class EsignatureRequirementsPage extends eSignatureRequirementsPageRepo i
 		return this;
 
 	}
+	
+	public EsignatureRequirementsPage uncheckReqCurriculumViate(String... parameters) {
+		recordScreenIframeSwitch();
+		boolean state = reqEsigCurrViatechkbox().isSelected();
+		if (state) {
+			reqEsigCurrViatechkbox().click();
+			saveChangeslnk().click();
+			electronicallySignIn(parameters[0], parameters[1], parameters[2], parameters[3]);
+		} else
+			returnlnk().click();
+		return this;
+
+	}
+	
 
 	/*
 	 * public EsignatureRequirementsPage unCheckReqEsigPasswordPolicies() {
@@ -103,6 +118,8 @@ public class EsignatureRequirementsPage extends eSignatureRequirementsPageRepo i
 
 	public String getEsignature(String userName) {
 		recordScreenIframeSwitch();
+		takeDebugScreenShot();
+		waitUntilElementDisplayed(electronicSignature(userName));
 		return electronicSignature(userName).getAttribute("innerText");
 
 	}
@@ -140,6 +157,14 @@ public class EsignatureRequirementsPage extends eSignatureRequirementsPageRepo i
 
 	}
 
+	public EsignatureRequirementsPage checkReqCurriculumViate() {
+		recordScreenIframeSwitch();
+		boolean state = reqEsigCurrViatechkbox().isSelected();
+		if (!state)
+			reqEsigCurrViatechkbox().click();
+		return this;
+	}
+	
 	public EsignatureRequirementsPage checkReqEsigCtrlDoc() {
 		recordScreenIframeSwitch();
 		boolean state = reqEsigCtrlDocchkbox().isSelected();
@@ -159,6 +184,9 @@ public class EsignatureRequirementsPage extends eSignatureRequirementsPageRepo i
 			returnlnk().click();
 		return this;
 
+	}
+	public LoginPage logOut() {
+		return adminNav_CommonSection.logOut();
 	}
 
 }

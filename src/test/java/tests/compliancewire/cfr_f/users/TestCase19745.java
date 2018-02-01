@@ -13,15 +13,26 @@ import initializer.DynamicDataProvider;
 public class TestCase19745 extends BaseTest {
 	private static final Logger logger = Logger.getLogger(TestCase19745.class);
 
-	@Test(alwaysRun = true, dataProviderClass = DynamicDataProvider.class, dataProvider = "createAdminUser", description = "Users_History_Group membership history", groups = {
+	@Test(alwaysRun = true, description
+			= "The Group Membership History or History window (accessed from View Group Information) "
+					+ "will display a chronological history of any changes made to the group membership", groups = {
 			"cfr_f", "cfr_f.users" })
-	public void Users_History_Group_membership_history(String userName) throws Exception {
+	public void Users_History_Group_membership_history() throws Exception {
 		
-		loginPage.signIn(userName, getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE"))
+		addToStorage("adminUser",
+				getRandomEntityID().substring(0, 7) + getRandomEntityID().substring(0, 5) + "_AdminUsr");
+		loginPage
+				.signIn(getData("GENERIC.USER"), getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE"))
+				.openToolsMenu().openUsersPage().openAddUser()
+				.addANewUser(getFromStorage("adminUser") + "fn", getFromStorage("adminUser") + "ln",
+						getFromStorage("adminUser"), getData("GENERIC.TOP_ORGANIZATION"))
+				.openSecurityRoles().openAssignSecurityRole()
+				.assignRole(getData("GENERIC.TOP_ORGANIZATION"), getData("GENERIC.ROLE_ADMIN")).logOut()
+				.signIn(getFromStorage("adminUser"), getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE"))
 				.openToolsMenu().openUsersPage();
 		
-		usersPage.searchUser(userName).openSecurityRoles();
-		Assert(true, "Precondition: Admin User");
+		usersPage.searchUser(getFromStorage("adminUser")).openSecurityRoles();
+		Assert(userManagementPage.openSecurityRoles().getSecurityRole().contains("Organization Administrator"), "Precondition: Admin User -" + getFromStorage("adminUser"));
 		userManagementPage.returnFromUserManagement();
 		
 		addToStorage("randomTag", getRandomEntityID().substring(0, 7));
@@ -45,7 +56,7 @@ public class TestCase19745 extends BaseTest {
 				&& groupMembershipHistoryPage.getTopRow().contains("Action")
 				&& groupMembershipHistoryPage.getTopRow().contains("Modified By")
 				&& groupMembershipHistoryPage.getTopRow().contains("Modified On")
-				&& groupMembershipHistoryPage.getRow(0).contains("Genz, Pinaa")
+				&& groupMembershipHistoryPage.getRow(0).contains("_AdminUsr")
 				&& groupMembershipHistoryPage.getRow(0).contains("Changed - Moved to Exclusion List")
 				&& groupMembershipHistoryPage.getRow(1).contains(getFromStorage("randomTag") + "usr")
 				&& groupMembershipHistoryPage.getRow(1).contains("Added Directly"),

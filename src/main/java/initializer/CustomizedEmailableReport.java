@@ -171,8 +171,8 @@ public class CustomizedEmailableReport implements IReporter {
                     buff.append("<tr class=\"" + style
                             + (cq % 2 == 0 ? "odd" : "even") + "\">");
                 }
-                //String description = method.getDescription();
-                String description = "";
+                String description = method.getDescription();
+               // String description = "";
                 //String testInstanceName = resultSet.toArray(new ITestResult[] {})[0].getTestName();
                 String testInstanceName=null;
                 

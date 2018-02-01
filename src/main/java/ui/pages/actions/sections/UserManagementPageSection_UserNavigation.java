@@ -26,6 +26,7 @@ public class UserManagementPageSection_UserNavigation extends UserNavigation_Use
 	public UserManagementPage openHistory() {
 		recordScreenIframeSwitch();
 		staticWait(1500);
+		waitUntilElementDisplayed(history());
 		history().click();
 		return new UserManagementPage(driver);
 	}
@@ -52,7 +53,24 @@ public class UserManagementPageSection_UserNavigation extends UserNavigation_Use
 	public UserManagementPage openAddUsersDirectly(String userName) {
 		recordScreenIframeSwitch();
 		addUsersDirectlyLnk().click();
-		
+		return new UserManagementPage(driver);
+	}
+
+	public UserManagementPage openAssignSecurityRole() {
+		recordScreenIframeSwitch();
+		assignSecurityRole().click();
+		return new UserManagementPage(driver);
+	}
+
+	public UserManagementPage openReferenceMaterial() {
+		recordScreenIframeSwitch();
+		referenceMaterialLnk().click();
+		return new UserManagementPage(driver);
+	}
+
+	public UserManagementPage openAddDocument() {
+		recordScreenIframeSwitch();
+		addaDocumentLnk().click();
 		return new UserManagementPage(driver);
 	}
 

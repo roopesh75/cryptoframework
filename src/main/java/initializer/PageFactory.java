@@ -1,6 +1,5 @@
 package initializer;
 
-import org.apache.bcel.generic.NEW;
 import org.apache.log4j.Logger;
 
 import ui.BrowserDriver;
@@ -18,7 +17,10 @@ import ui.pages.actions.ChangePasswordPage;
 import ui.pages.actions.ClassesPage;
 import ui.pages.actions.ControlDocumentTrainingPage;
 import ui.pages.actions.CurriculumReportPage;
+import ui.pages.actions.CurriculumVitaePage;
 import ui.pages.actions.CustomExamPage;
+import ui.pages.actions.DefineAssignmentReportPage;
+import ui.pages.actions.DefineCompletionReportPage;
 import ui.pages.actions.DefineEventLogReportPage;
 import ui.pages.actions.DefinePasswordPoliciesPage;
 import ui.pages.actions.EditGroupCriteriaPage;
@@ -31,9 +33,12 @@ import ui.pages.actions.HistoryPage;
 import ui.pages.actions.HomePage;
 import ui.pages.actions.InstructorLedCoursePage;
 import ui.pages.actions.LoginPage;
+import ui.pages.actions.LogsManagementPage;
 import ui.pages.actions.LogsPage;
+import ui.pages.actions.OptionsManagementPage;
 import ui.pages.actions.OptionsPage;
 import ui.pages.actions.PreferencesPage;
+import ui.pages.actions.QuizPage;
 import ui.pages.actions.SecurityRolePage;
 import ui.pages.actions.SecuritySettingsPage;
 import ui.pages.actions.ToDoPage;
@@ -52,12 +57,20 @@ public class PageFactory {
 
 		case "LoginPage":
 			return new LoginPage(driver);
+		case "DefineAssignmentReportPage":
+			return new DefineAssignmentReportPage(driver);
+		case "DefineCompletionReportPage":
+			return new DefineCompletionReportPage(driver);
+		case "LogsManagementPage":
+			return new LogsManagementPage(driver);
 		case "UsersPage":
 			return new UsersPage(driver);
 		case "HomePage":
 			return new HomePage(driver);
 		case "GroupCriteriaChangeLogPage":
 			return new GroupCriteriaChangeLogPage(driver);
+		case "CurriculumVitaePage":
+			return new CurriculumVitaePage(driver);
 		case "GroupManagementPage":
 			return new GroupManagementPage(driver);
 		case "UserManagementPage":
@@ -66,6 +79,8 @@ public class PageFactory {
 			return new EditGroupCriteriaPage(driver);
 		case "AddNewUserPage":
 			return new AddNewUserPage(driver);
+		case "QuizPage":
+			return new QuizPage(driver);
 		case "TrainingManagementPage":
 			return new TrainingManagementPage(driver);
 		case "TrainingPage":
@@ -106,6 +121,8 @@ public class PageFactory {
 			return new InstructorLedCoursePage(driver);
 		case "AddClassPage":
 			return new AddClassPage(driver);
+		case "OptionsManagementPage":
+			return new OptionsManagementPage(driver);
 		case "AssignmentPage":
 			return new AssignmentPage(driver);
 		case "AssignmentManagementPage":

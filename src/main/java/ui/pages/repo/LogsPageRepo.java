@@ -5,5 +5,7 @@ import ui.UiBase;
 
 public class LogsPageRepo extends UiBase {
 
-    
+	protected BrowserElement majorUpgradeslnk() {
+		return findByLinkText("Major Upgrades");
+	}
 }

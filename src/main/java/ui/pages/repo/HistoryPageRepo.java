@@ -17,6 +17,9 @@ public class HistoryPageRepo extends UiBase {
 	protected BrowserElement completionInfoPageContent() {
 		return findByTagName("body");
 	}
+	protected BrowserElement historyPageContent() {
+		return findByTagName("body");
+	}
 	protected BrowserElement dateInfoLbl(int index) {
 		return new BrowserElementImpl(getDriver().findElements(By.cssSelector("span[title='UTC -5:00']")).get(index),getDriver().getWebDriver());
 	}
@@ -32,11 +35,10 @@ public class HistoryPageRepo extends UiBase {
 	protected BrowserElement signatureLbl(){
 		return findByXpath("//*[@id='main-panel']/div[5]/div/div[6]/div[2]/p/span");
 	}
-	protected BrowserElement sortOptionsLnk(){
-		return findById("span-sort");
+	
+
+	protected BrowserElement trainingcompletionDate(){
+		return findByXpath("//td[contains(text(),'Completed on: ')]");
 	}
 	
-	protected BrowserElement completionDateOldestBtn(){
-		return findByXpath("//button[text()='Completion Date (Oldest)']");
-	}
 }

@@ -100,6 +100,7 @@ public class SecuritySettingsPage extends SecuritySettingsPageRepo {
 
 	public void editSecurityRole() {
 		editSecurityRoleLnk().click();
+		scrollDown();
 		defineEditSecurityRoleChkBox().click();
 		saveLnk().click();
 	}
@@ -125,7 +126,10 @@ public class SecuritySettingsPage extends SecuritySettingsPageRepo {
 		return txt;
 
 	}
+	public boolean getPersmissionStatus(String attribute) {	
+		return findById(attribute).isSelected();
 
+	}
 	public boolean isAssignSecurityRoleCheckBoxEnabled(String userName) {
 		// TODO Auto-generated method stub
 		return getOverideableStateSecurityRole(userName);

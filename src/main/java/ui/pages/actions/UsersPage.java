@@ -47,7 +47,13 @@ public class UsersPage extends UsersPageRepo {
 	public SecurityRolePage openSecurityRoles() {
 		return manageUsers_usersPage.openSecurityRoles();
 	}
-
+	
+	public String getOlSearchUser() {
+		return searchUsers_usersPage.getOlSearchUser();
+	}
+	public String getSearchUser() {
+		return searchUsers_usersPage.getSearchUser();
+	}
 	public boolean isUsersPage() {
 		return manageUsers_usersPage.isManageUsersSectionLoaded();
 	}
@@ -78,6 +84,20 @@ public class UsersPage extends UsersPageRepo {
 
 	public HomePage openKnowledgeCenter() {
 		return adminNav_CommonSection.openKnowledgeCenter();
+		
+	}
+
+	public LogsPage openLogsPage() {
+		return adminNav_CommonSection.openLogsPage();
+		
+	}
+
+	public DefineCompletionReportPage openUserCompletionReport() {
+		recordScreenIframeSwitch();
+		return newUserReports_usersPage.openCompletionReportByUser();
+	}
+	public HomePage openOlKnowledgeCenter() {
+		return adminNav_CommonSection.openOlKnowledgeCenter();
 		
 	}
 }

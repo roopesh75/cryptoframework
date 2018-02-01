@@ -7,7 +7,16 @@ public class UserNavigation_UserManagementPageSectionRepo extends UiBase {
 	protected BrowserElement generalInformation() {
 		return findByLinkText("General Information");
 	}
-
+	protected BrowserElement assignSecurityRole() {
+		return findByLinkText("Assign Security Role");
+	}
+	protected BrowserElement referenceMaterialLnk() {
+		return findByLinkText("Reference Material");
+	}
+	protected BrowserElement addaDocumentLnk() {
+		return findByLinkText("Add a Document");
+	}
+	
 	protected BrowserElement history() {
 		return findByLinkText("History");
 	}

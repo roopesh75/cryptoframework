@@ -1,9 +1,12 @@
 package ui.pages.actions.overlays;
 
-import ui.pages.actions.TrainingPage;
+import ui.pages.actions.TrainingManagementPage;
 
 public interface ISearchForTrainingOverlay {
 	
 	public String getSearchStatus();
-	public TrainingPage closeSearchTrainingOverlay();
+	public String getResultsFromSearchOverlay();
+	public TrainingManagementPage closeSearchTrainingOverlay();
+	public TrainingManagementPage searchTraining(String trainingCode);
+	public TrainingManagementPage chooseVersion(String trainingCode,String version);
 }

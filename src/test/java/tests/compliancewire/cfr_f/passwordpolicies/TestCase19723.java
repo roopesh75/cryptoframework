@@ -1,10 +1,5 @@
 package tests.compliancewire.cfr_f.passwordpolicies;
 
-/*
- * @roopesh
- * 1.Analyze why return link is taking time to move back
- * 2.
- */
 import org.apache.log4j.Logger;
 import org.testng.annotations.Test;
 
@@ -15,23 +10,34 @@ public class TestCase19723 extends BaseTest {
 
 	private static final Logger logger = Logger.getLogger(TestCase19723.class);
 
-	@Test(priority = 4,alwaysRun = true, dataProviderClass = DynamicDataProvider.class, dataProvider = "createAdminUser", description = "Options_Password policies_password complexity requirement", groups = {
+	@Test(priority = 4,alwaysRun = true, description =
+			"Password policies can be defined to require a password complexity that contains a"
+			+ " combination of letters (uppercase, lowercase) and/or numbers", groups = {
 			"cfr_f", "cfr_f.passwordpolicies" })
-	public void Options_Password_policies_password_complexity_requirement(String userName) throws Exception {
-		loginPage.signIn(userName, getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE"));
+	public void Options_Password_policies_password_complexity_requirement() throws Exception {
+		addToStorage("adminUser",
+				getRandomEntityID().substring(0, 7) + getRandomEntityID().substring(0, 5) + "_AdminUsr");
+		loginPage
+				.signIn(getData("GENERIC.USER"), getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE"))
+				.openToolsMenu().openUsersPage().openAddUser()
+				.addANewUser(getFromStorage("adminUser") + "fn", getFromStorage("adminUser") + "ln",
+						getFromStorage("adminUser"), getData("GENERIC.TOP_ORGANIZATION"))
+				.openSecurityRoles().openAssignSecurityRole()
+				.assignRole(getData("GENERIC.TOP_ORGANIZATION"), getData("GENERIC.ROLE_ADMIN")).logOut()
+				.signIn(getFromStorage("adminUser"), getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE"));
 		Assert(homePage.isHomePage(), "Admin user will be able to login successfully");
 		homePage.openToolsMenu().openUsersPage();
-		usersPage.searchUser(userName).openSecurityRoles();
-		Assert(true, "Precondition: Admin User");
+		usersPage.searchUser(getFromStorage("adminUser")).openSecurityRoles();
+		Assert(userManagementPage.openSecurityRoles().getSecurityRole().contains("Organization Administrator"), "Precondition: Admin User -" + getFromStorage("adminUser"));
 		usersPage.openOptionsPage().openEsignatureRequirements().openEditRequirements()
-				.uncheckReqEsigPasswordPolicies(userName, getData("GENERIC.PASSWORD"),
+				.uncheckReqEsigPasswordPolicies(getFromStorage("adminUser"), getData("GENERIC.PASSWORD"),
 						getData("TC19721.SIGNATUREREASON"),"RecScr");
 		esignatureRequirementsPage.openEditRequirements().checkReqEsigPasswordPolicies().saveChanges()
-				.electronicallySignIn(userName, getData("GENERIC.PASSWORD"), getData("TC19721.SIGNATUREREASON"),"RecScr");
+				.electronicallySignIn(getFromStorage("adminUser"), getData("GENERIC.PASSWORD"), getData("TC19721.SIGNATUREREASON"),"RecScr");
 		esignatureRequirementsPage.returnOptionsPage().openPasswordPolicies().openEditPasswordPolicies();
 		Assert(definePasswordPoliciesPage.isEditPasswordPoliciesPage(),
 				"Edit password policies page should be displayed");
-		definePasswordPoliciesPage.setPasswordComplexity().saveChanges().electonicallySignIn(userName,
+		definePasswordPoliciesPage.setPasswordComplexity().saveChanges().electronicallySignIn(getFromStorage("adminUser"),
 				getData("GENERIC.PASSWORD"), getData("TC19721.SIGNATUREREASON"),"RecScr");
 		Assert(definePasswordPoliciesPage.getPasswordComplexity().contains("Require Letters in Uppercase")
 				&& definePasswordPoliciesPage.getPasswordComplexity().contains("Require Passwords contain Numbers"),
@@ -44,12 +50,12 @@ public class TestCase19723 extends BaseTest {
 		changePasswordPage.changePassword(getData("GENERIC.PASSWORD"), "ABC1", "ABC1");
 		Assert(changePasswordPage.getSuccessMessage().contains("Your Password has been changed"),
 				"The user's password will be changed to a new password.");
-		changePasswordPage.continuePwd().logOut().signIn(userName, "ABC1", getData("GENERIC.AUTOMATION.COMPANYCODE"));
+		changePasswordPage.continuePwd().logOut().signIn(getFromStorage("adminUser"), "ABC1", getData("GENERIC.AUTOMATION.COMPANYCODE"));
 		Assert(homePage.isHomePage(), "Admin user will be able to login successfully");
 
 		// cleaning up the data
 		homePage.openToolsMenu().openOptionsPage().openEsignatureRequirements().openEditRequirements()
-				.uncheckReqEsigPasswordPolicies(userName, "ABC1",
+				.uncheckReqEsigPasswordPolicies(getFromStorage("adminUser"), "ABC1",
 						getData("TC19721.SIGNATUREREASON"),"RecScr")
 				.returnOptionsPage().openPasswordPolicies().openEditPasswordPolicies().unsetPasswordComplexity()
 				.saveChanges();

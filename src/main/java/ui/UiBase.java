@@ -8,6 +8,9 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.*;
+
+import com.google.common.base.Function;
+
 import ui.support.Config;
 import ui.utils.RegexSearch;
 import ui.utils.browser.Browser;
@@ -26,7 +29,9 @@ import static java.util.stream.Collectors.toMap;
 
 public class UiBase {
 
-
+	public static final String IFCATS_SCREEN_IFRAME = "IFCats";
+	public static final String IFTYPES_SCREEN_IFRAME = "IFTypes";
+	public static final String COLUMNS_SCREEN_IFRAME = "Columns";
     public static final String RECORD_SCREEN_IFRAME = "RecScr";
     public static final String POPUP_IFRAME = "ifrmPopup";
     public static final String FRAMEID_IFRAME = "frameId";
@@ -46,7 +51,24 @@ public class UiBase {
     public BrowserDriver   getDriver() {
         return driver.setMethodInvokedOn(Thread.currentThread().getStackTrace()[2].getMethodName());
     }
-    
+	protected void takeDebugScreenShot() {
+		 findByTagName("body").getText();
+	}
+	 public void IfCatsViaRecordScreenIframeSwitch(){
+	    	switchToDefaultFrame();
+	    	switchToFrame(RECORD_SCREEN_IFRAME);
+			switchToFrame(IFCATS_SCREEN_IFRAME);
+	    }
+	 public void IfTypesViaRecordScreenIframeSwitch(){
+	    	switchToDefaultFrame();
+	    	switchToFrame(RECORD_SCREEN_IFRAME);
+			switchToFrame(IFTYPES_SCREEN_IFRAME);
+	    }
+	 public void ColumnsViaRecordScreenIframeSwitch(){
+	    	switchToDefaultFrame();
+	    	switchToFrame(RECORD_SCREEN_IFRAME);
+			switchToFrame(COLUMNS_SCREEN_IFRAME);
+	    }
     public void recordScreenIframeSwitch(){
     	switchToDefaultFrame();
 		switchToFrame(RECORD_SCREEN_IFRAME);
@@ -61,12 +83,15 @@ public class UiBase {
     }
     public void popUpIframeViaRecordScreenIframeSwitch(){
     	switchToDefaultFrame();
-		switchToFrame(RECORD_SCREEN_IFRAME);
-		switchToFrame(POPUP_IFRAME);
+    	waitUntilIframeAvailable(RECORD_SCREEN_IFRAME);
+    	waitUntilIframeAvailable(POPUP_IFRAME);
+		//switchToFrame(RECORD_SCREEN_IFRAME);
+		//switchToFrame(POPUP_IFRAME);
     }
     public void frameIdIframeSwitch(){
     	switchToDefaultFrame();
-		switchToFrame(FRAMEID_IFRAME);
+    	waitUntilIframeAvailable(FRAMEID_IFRAME);
+	//	switchToFrame(FRAMEID_IFRAME);
 		
     }
     public RegexSearch regexSearch = new RegexSearch();
@@ -206,22 +231,31 @@ public class UiBase {
 
     }
 
-    public Boolean waitUntilElementDisplayed(WebElement element) {
+    public Boolean waitUntilElementDisplayed(BrowserElement element) {
         try {
             (new WebDriverWait(driver.getWebDriver(), getMaxTimeout()))
-                    .until(ExpectedConditions.visibilityOf(element));
+                    .until(ExpectedConditions.visibilityOf(element.getWrappedElement()));
             return true;
         } catch (Exception e) {
             return false;
         }
     }
 
-    public Boolean waitUntilElementDisplayed(WebElement element, int timeInSeconds) {
+    public Boolean waitUntilIframeAvailable(String frameId) {
+        try {
+            (new WebDriverWait(driver.getWebDriver(), getMaxTimeout()))
+                    .until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frameId));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    public Boolean waitUntilElementDisplayed(BrowserElement element, int timeInSeconds) {
         try {
 
             (new WebDriverWait(driver.getWebDriver(), timeInSeconds))
 
-                    .until(ExpectedConditions.visibilityOf(element));
+                    .until(ExpectedConditions.visibilityOf(element.getWrappedElement()));
             return true;
         } catch (Exception e) {
             return false;
@@ -309,7 +343,7 @@ public class UiBase {
 
     public void mouseHover(BrowserElement element) {
 
-        waitUntilElementDisplayed(element.getWrappedElement());
+        waitUntilElementDisplayed(element);
         actions = new Actions(getDriver().getWebDriver());
         actions.moveToElement(element.getWrappedElement()).perform();
 
@@ -351,7 +385,7 @@ public class UiBase {
         javascriptExecutor.executeScript(script, element.getWrappedElement());
     }
 
-    public void switchToFrame(WebElement element) {
+    public void switchToFrame(BrowserElement element) {
         waitUntilElementDisplayed(element);
         getDriver().switchTo().frame(element);
     }
@@ -588,9 +622,10 @@ public class UiBase {
 
     public void acceptAlert() {
         driver.switchTo().alert().accept();
-
     }
-
+    public String getAlertText() {
+       return driver.switchTo().alert().getText();
+    }
     public void waitAndAcceptAlert(int waitTimeInSeconds) {
         try {
             WebDriverWait wait = new WebDriverWait(driver, waitTimeInSeconds);
@@ -620,7 +655,9 @@ public class UiBase {
     public void scrollDown() {
         ((JavascriptExecutor) driver.getWebDriver()).executeScript("scroll(0,250);");
     }
-
+    public void scrollTop() {
+        ((JavascriptExecutor) driver.getWebDriver()).executeScript("scroll(0,0);");
+    }
 
     public String getCurrentUrl() {
         return getDriver().getCurrentUrl();
@@ -715,7 +752,7 @@ public class UiBase {
             if ((boolean) ajaxIsComplete) {
                 break;
             }
-            //logger.info("ThreadID: "+Thread.currentThread().getId()+"  "+Thread.currentThread().getName()+" "+(location);
+            logger.info("ThreadID: "+Thread.currentThread().getId()+"  "+Thread.currentThread().getName()+" "+(location));
             staticWait(500);
             iterationsIndex++;
         }
@@ -821,8 +858,8 @@ public class UiBase {
     }
 
     public void waitUntilElementInvisible(String element) {
-        WebDriverWait wait = new WebDriverWait(driver, 10);
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className(element)));
+        WebDriverWait wait = new WebDriverWait(driver, getMaxTimeout());
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.linkText(element)));
     }
 
     /*public void waitForPageReadyState(String s) throws InterruptedException {

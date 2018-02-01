@@ -26,6 +26,9 @@ public class AssignmentPage extends AssignmentPageRepo {
 		return new AddAnAssignmentDefinitionPage(driver);
 
 	}
+	public DefineAssignmentReportPage openAssignmentReportByTraining(){
+		return assignmentPageSection_NewAssignmentReport.openAssignmentReportByTraining();
+	}
 
 	public LoginPage logOut() {
 		return adminNav_CommonSection.logOut();

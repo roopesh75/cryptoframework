@@ -20,6 +20,15 @@ public class CurriculumReportPage extends CurriculumReportPageRepo {
 		recordScreenIframeSwitch();
 		return addCurriculumlnk().isDisplayed();
 	}
+	public ViewCurriculumPage chooseCurriculum(String curriculum) {
+		recordScreenIframeSwitch();
+		findByLinkText(curriculum).click();
+		return new ViewCurriculumPage(driver);
+	}
+	public String getPRINTTableBorder() {
+		recordScreenIframeSwitch();
+		return printTableBorderTxt().getText();
+	}
 	
 	
 }

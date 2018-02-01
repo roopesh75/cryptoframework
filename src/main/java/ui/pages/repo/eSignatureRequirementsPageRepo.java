@@ -20,6 +20,9 @@ public class eSignatureRequirementsPageRepo extends UiBase {
 	protected BrowserElement reqEsigCtrlDocchkbox() {
 		return findByName("CD");
 	}
+	protected BrowserElement reqEsigCurrViatechkbox() {
+		return findByName("CurrVitae");
+	}
 	protected BrowserElement reqEsigStudentOnlineRegchkbox() {
 		
 		return findByName("STUDENTONLINEREG");
@@ -30,9 +33,7 @@ public class eSignatureRequirementsPageRepo extends UiBase {
 	}
 
 	protected BrowserElement electronicSignature(String userName) {
-		
 		return findByXpath("//*[contains(text(),'"+userName+"')]");
-		//input[@name='PP']/following::td[2]
 	}
 	protected BrowserElement returnlnk() {
 		return findByLinkText("Return");

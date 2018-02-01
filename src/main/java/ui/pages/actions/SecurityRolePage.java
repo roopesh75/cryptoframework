@@ -37,7 +37,10 @@ public class SecurityRolePage extends SecurityRolePageRepo {
 		recordScreenIframeSwitch();
 		return securityRolesTbl().getText();
 	}
-
+	public String getPRINTTableBorder() {
+		recordScreenIframeSwitch();
+		return printTableBorderTxt().getText();
+	}
 	//
 	public UsersPage returnFromSecurityRole() {
 		recordScreenIframeSwitch();

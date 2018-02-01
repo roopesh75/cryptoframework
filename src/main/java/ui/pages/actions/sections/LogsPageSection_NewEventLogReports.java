@@ -17,7 +17,6 @@ public class LogsPageSection_NewEventLogReports extends NewEventLogReports_LogsP
 		recordScreenIframeSwitch();
 		// staticWait(1000);
 		eventLogReportlnk().click();
-
 		return new DefineEventLogReportPage(driver);
 	}
 }

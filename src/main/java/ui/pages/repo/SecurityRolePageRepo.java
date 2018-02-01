@@ -7,6 +7,9 @@ public class SecurityRolePageRepo extends UiBase {
 	protected BrowserElement addNewSecurityLnk() {
 		return findByLinkText("Add New Security Role");
 	}
+	protected BrowserElement printTableBorderTxt() {
+		return findByClass("PRINTTableBorder");
+	}
 	protected BrowserElement continueSecurityRoleLnk() {
 		return findByLinkText("Continue");
 	}

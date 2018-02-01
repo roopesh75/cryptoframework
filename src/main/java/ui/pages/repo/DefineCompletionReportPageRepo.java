@@ -7,9 +7,28 @@ public class DefineCompletionReportPageRepo extends UiBase {
 	protected BrowserElement trngCodeTxtbox() {
 		return findByName("trainValue1");
 	}
-	protected BrowserElement userIdTxtbox() {
+	
+	protected BrowserElement selectUserType() {
+		return findByName("EnabledUser");
+	}
+	protected BrowserElement selectUserAttr1() {
+		return findByName("user1");
+	}
+	protected BrowserElement selectUserOperator1() {
+		return findByName("operatoru1");
+	}
+	protected BrowserElement userIdValue1Txtbox() {
 		return findByName("userValue1");
 	}
+	protected BrowserElement selectUserAttr2() {
+		return findByName("user2");
+	}
+	protected BrowserElement selectUserOperator2() {
+		return findByName("operatoru2");
+	}
+	protected BrowserElement userIdValue2Txtbox() {
+		return findByName("userValue2");
+	}	
 	protected BrowserElement runReportLnk() {
 		return findByLinkText("Run this Report");
 	}

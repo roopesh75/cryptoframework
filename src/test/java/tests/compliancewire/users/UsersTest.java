@@ -24,7 +24,7 @@ public class UsersTest {
 		// return Arrays.copyOfRange(UsersObjects,0,100);
 	}
 
-	@Test(threadPoolSize=30,alwaysRun = true, dataProvider = "usersInfo", timeOut = 10000)
+	@Test(threadPoolSize=300,alwaysRun = true, dataProvider = "usersInfo", timeOut = 10000)
 	public void testUsers(String userId) {
 		String response = new HTTPClient().post(
 				"https://prodcopy.compliancewire.com/secure/EncryptionLogCheck.ASP", "UserID=" + userId

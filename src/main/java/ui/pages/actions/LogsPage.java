@@ -28,4 +28,10 @@ public class LogsPage extends LogsPageRepo {
 		adminNav_CommonSection.openOptionsPage();
 		return new OptionsPage(driver);
 	}
+
+	public LogsManagementPage openMajorUpgrades() {
+		recordScreenIframeSwitch();
+		majorUpgradeslnk().click();
+		return new LogsManagementPage(driver);
+	}
 }

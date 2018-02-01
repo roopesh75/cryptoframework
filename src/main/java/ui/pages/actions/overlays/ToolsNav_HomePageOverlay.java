@@ -23,6 +23,11 @@ public class ToolsNav_HomePageOverlay extends ToolsNav_HomePageOverlayRepo {
 		userslnk().click();
 		return new UsersPage(driver);
 	}
+	public UsersPage openOlUsersPage() {
+		waitForAjax("Wait for UsersOverlay");
+		olUserslnk().click();
+		return new UsersPage(driver);
+	}
 
 	public TrainingPage openTrainingPage() {
 		waitForAjax("Wait for TrainingOverlay");
@@ -33,6 +38,7 @@ public class ToolsNav_HomePageOverlay extends ToolsNav_HomePageOverlayRepo {
 
 	public OptionsPage openOptionsPage() {
 		waitForAjax("Wait for UsersOverlay");
+		waitUntilElementDisplayed(optionslnk());
 		optionslnk().click();
 		return new OptionsPage(driver);
 	}

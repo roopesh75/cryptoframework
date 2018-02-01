@@ -25,9 +25,10 @@ public class AddClassPage extends AddClassPageRepo {
 		recordScreenIframeSwitch();
 		startDate().sendKeys(date1);
 		endDate().sendKeys(date1);
+		new Select(endTime()).selectByValue("03");
 		new Select(timeZonedrp())
 				.selectByValue("16|-05:00|1|1|Second Sunday March 02:00:00|First Sunday November 02:00:00");
-		new Select(endTime()).selectByValue("03");
+	
 		saveClass().click();
 		return new ClassesPage(driver);
 	}

@@ -12,7 +12,9 @@ public class AddCurriculumPage extends AddCurriculumPageRepo {
 		setDriver(driver);
 	} 
 	public ViewCurriculumPage addACurriculum(String... parameters) {
+	
 		recordScreenIframeSwitch();
+		waitUntilElementDisplayed(curriculumCodetxt());
 		curriculumCodetxt().sendKeys(parameters[0]);
 		curriculumTitletxt().sendKeys(parameters[0]);
 		homeIcon().click();
@@ -23,5 +25,10 @@ public class AddCurriculumPage extends AddCurriculumPageRepo {
 		staticWait(1000);
 		savebtn().click();
 		return new ViewCurriculumPage(driver);
+	}
+	public TrainingPage openReturn(){
+		recordScreenIframeSwitch();
+		returnLnk().click();
+		return new TrainingPage(driver);
 	}
 }

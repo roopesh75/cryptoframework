@@ -8,7 +8,7 @@ public class CurriculumInfoNav_HomePageSectionRepo extends UiBase {
 		return findById("catalog");
 	}
 	protected BrowserElement toDolnk() {
-		return findById("To-Do");
+		return findById("todo");
 	}
 	protected BrowserElement historylnk() {
 		return findById("history");

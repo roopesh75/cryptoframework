@@ -1,26 +1,31 @@
 package tests.compliancewire.basic.training;
 
-/**
- * @Roopesh
- * 1.date time stamp is not captured as part of expected result  7 
- * 2.Test step 5 should be split to 2 separate steps "Verify that Password is displayed in encrypted form for e-signature"
- * 3.Create web services to check and uncheck password policies 
- */
 import org.apache.log4j.Logger;
 import org.testng.annotations.Test;
 
 import initializer.BaseTest;
-import initializer.DynamicDataProvider;
 
 public class TestCase20208 extends BaseTest {
 	private static final Logger logger = Logger.getLogger(TestCase20208.class);
 
-	@Test(alwaysRun = true, dataProviderClass = DynamicDataProvider.class, dataProvider = "createAdminUser", description = "Add a curriculum and Add training items to a curriculum", groups = { "basic", "basic.training" })
-	public void Training_Curriculum_Create_And_Add_TI_items(String userName) throws Exception {
+	@Test(alwaysRun = true, description = "Add a curriculum and Add training items to a curriculum", groups = { "basic",
+			"basic.training" })
+	public void Training_Curriculum_Create_And_Add_TI_items() throws Exception {
 		addToStorage("curriculumInfo", getRandomEntityID().substring(0, 7));
-		loginPage.signIn(userName, getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE")).openToolsMenu()
-				.openUsersPage().searchUser(userName).openSecurityRoles();
-		Assert(true, "Precondition: Admin User");
+		addToStorage("adminUser",
+				getRandomEntityID().substring(0, 7) + getRandomEntityID().substring(0, 5) + "_AdminUsr");
+		loginPage
+				.signIn(getData("GENERIC.USER"), getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE"))
+				.openToolsMenu().openUsersPage().openAddUser()
+				.addANewUser(getFromStorage("adminUser") + "fn", getFromStorage("adminUser") + "ln",
+						getFromStorage("adminUser"), getData("GENERIC.TOP_ORGANIZATION"))
+				.openSecurityRoles().openAssignSecurityRole()
+				.assignRole(getData("GENERIC.TOP_ORGANIZATION"), getData("GENERIC.ROLE_ADMIN")).logOut()
+				.signIn(getFromStorage("adminUser"), getData("GENERIC.PASSWORD"),
+						getData("GENERIC.AUTOMATION.COMPANYCODE"))
+				.openToolsMenu().openUsersPage().searchUser(getFromStorage("adminUser")).openSecurityRoles();
+		Assert(userManagementPage.openSecurityRoles().getSecurityRole().contains("Organization Administrator"),
+				"Precondition: Admin User -" + getFromStorage("adminUser"));
 		userManagementPage.returnFromUserManagement().openTrainingPage().openDisplayCurriculumList();
 		Assert(curriculumReportPage.isCurriculumReportPage(), "Curriculum Report screen will be displayed");
 		curriculumReportPage.openAddCurriculum().addACurriculum(getFromStorage("curriculumInfo") + "clm",

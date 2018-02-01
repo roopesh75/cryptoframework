@@ -24,11 +24,12 @@ public class HomePage extends HomePageRepo {
         settingsNav_homePage.openToolsMenu();
         return new ToolsNav_HomePageOverlay(driver);
     }
-
+    
     public UsersPage openUsers(){
         openToolsMenu().openUsersPage();
         return new UsersPage(driver);
     }
+   
     public LoginPage logOut(){
         settingsNav_homePage.logOut();
 
@@ -61,4 +62,24 @@ public class HomePage extends HomePageRepo {
 	public String getPendingReports() {
 		return getToDoPage().getPendingReports();
 	}
+
+	public HomePage openAnswerQuestions() {
+		ansQuestionsLnk().click();
+		return this;
+	}
+
+	public HomePage addQuestionAnswer() {
+		firstQuestionLnk().click();
+		firstAnswerTxtBox().sendKeys("a");
+		saveBtn().click();
+		okBtn().click();
+		continueBtn().click();
+		return this;
+	}
+	public String getPanelTitle(){
+		return panelTitleTxt().getText();
+	}
+	
+	
+	
 }

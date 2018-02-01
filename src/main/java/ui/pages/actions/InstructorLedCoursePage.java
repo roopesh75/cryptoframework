@@ -33,8 +33,8 @@ public class InstructorLedCoursePage extends InstructorLedCoursePageRepo {
 		completionExpiresTxt().sendKeys("1");
 		totalCourseTimeTxt().sendKeys("1");
 		courseFeeTxt().sendKeys("1000");
-		courseDescriptionTxt().sendKeys("This is a sample description for ILC course on "+Tools.getCurrentDate());
-		courseCommentsTxt().sendKeys("This is the new comment for ILC course on "+Tools.getCurrentDate());
+		courseDescriptionTxt().sendKeys("This is a sample description for ILC course on "+Tools.getCurrentDate("MM/dd/yyyy"));
+		courseCommentsTxt().sendKeys("This is the new comment for ILC course on "+Tools.getCurrentDate("MM/dd/yyyy"));
 		onlineRegnradio().click();
 		save().click();
 		return new TrainingManagementPage(driver);

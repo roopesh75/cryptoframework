@@ -4,23 +4,28 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import ui.BrowserDriver;
+import ui.pages.actions.sections.MenuNav_CommonSection;
 import ui.pages.repo.HistoryPageRepo;
 
 public class HistoryPage extends HistoryPageRepo {
 
 	BrowserDriver driver;
-
+	MenuNav_CommonSection menuNav_CommonSection;
 	public HistoryPage(BrowserDriver driver) {
 		this.driver = driver;
+		menuNav_CommonSection= new MenuNav_CommonSection(driver);
 		setDriver(driver);
 	}
 
 	public String getCompletionInfoPageContent() {
-
 		return completionInfoPageContent().getText();
+	}
+	public String getHistoryPageContent() {
+		return historyPageContent().getText();
 	}
 
 	public String getCompletionDate() {
+		
 		return dateInfoLbl(0).getText();
 	}
 	public List<String> getCompletionDates() {
@@ -29,6 +34,7 @@ public class HistoryPage extends HistoryPageRepo {
 	}
 
 	public String getSignature() {
+		
 		return dateInfoLbl(1).getText();
 	}
 
@@ -42,19 +48,23 @@ public class HistoryPage extends HistoryPageRepo {
 	}
 
 	public HistoryPage openSortOptions() {
-		sortOptionsLnk().click();
+		menuNav_CommonSection.openSort();
 		return this;
 	}
 	public HistoryPage sortByCompletionDateOldest() {
-		completionDateOldestBtn().click();
+		menuNav_CommonSection.sortByCompletionDateOldestBtn();
 		return this;
 	}
-// 
+
 	public String getSignatureTimeZone() {
 		return signatureLbl().getAttribute("title");
 	}
 
 	public boolean isHistoryPage() {
 		return search().isDisplayed();
+	}
+	public String getTrainingCompletedOnDate() {
+		
+		return trainingcompletionDate().getText();
 	}
 }

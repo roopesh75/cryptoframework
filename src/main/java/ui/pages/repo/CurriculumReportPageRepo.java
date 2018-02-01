@@ -7,5 +7,7 @@ public class CurriculumReportPageRepo extends UiBase {
 	protected BrowserElement addCurriculumlnk() {
 		return findByLinkText("Add Curriculum");
 	} 
-
+	protected BrowserElement printTableBorderTxt() {
+		return findByClass("PRINTTableBorder");
+	} 
 }

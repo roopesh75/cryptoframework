@@ -16,9 +16,19 @@ public class UserManagementPageSection_Content extends Content_UserManagementPag
 
 	public String getFirstName() {
 		recordScreenIframeSwitch();
-		return firstName().getText();
-		
+		staticWait(3000);	
+		waitUntilElementDisplayed(firstName());
+		return firstName().getText();	
 	}
+	public String getContentSection() {
+		recordScreenIframeSwitch();
+		return CWBoxLbl().getText();	
+	}
+	public String getUserGroupName() {
+		recordScreenIframeSwitch();
+		return groupNameLbl().getText();	
+	}
+	//
 	public String getLastName() {
 		recordScreenIframeSwitch();
 		return lastName().getText();
@@ -31,18 +41,28 @@ public class UserManagementPageSection_Content extends Content_UserManagementPag
 	}
 
 	public String getSecurityRole() {
-		// TODO Auto-generated method stub
+	
 		recordScreenIframeSwitch();
 		return securityRole().getText();
 	}
+	public String getOrganizationEntity() {
+		
+		recordScreenIframeSwitch();
+		return organizationEntity().getText();
+	}
 	public String getHomeOrganization() {
-		// TODO Auto-generated method stub
+	
 		recordScreenIframeSwitch();
 		return homeOrganization().getText();
 	}
 	public String getHomePhone() {
 		recordScreenIframeSwitch();
 		return homePhone().getText();
+	}
+
+	public String getOrganization() {
+		recordScreenIframeSwitch();
+		return organizationLbl().getText();
 	}
 	
 }

@@ -57,4 +57,12 @@ public class CatalogPageRepo extends UiBase {
 	protected BrowserElement catalogPageContent() {
 		return findByTagName("body");
 	}
+	protected BrowserElement formanswer(String index) {
+		return findByName("ViewModel.FormElement["+index+"].UserAnswerId");
+	}
+	
+	protected BrowserElement continueLnk() {
+		return findByLinkText("Continue");
+	}
+	
 }

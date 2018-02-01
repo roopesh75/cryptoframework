@@ -14,13 +14,23 @@ import ui.utils.Tools;
 public class TestCase19742 extends BaseTest {
 	private static final Logger logger = Logger.getLogger(TestCase19742.class);
 
-	@Test(alwaysRun = true, dataProviderClass = DynamicDataProvider.class, dataProvider = "createAdminUser", description = "Users_Security Role_Assign & Override security role", groups = {
+	@Test(alwaysRun = true, description = "Able to assign a "
+					+ "security role to multiple users using user search option", groups = {
 			"cfr_f", "cfr_f.users" })
-	public void Users_Security_Role_Assign_Override_security_role(String userName) throws Exception {
-	loginPage.signIn(userName, getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE"))
+	public void Users_Security_Role_Assign_Override_security_role() throws Exception {
+		addToStorage("adminUser",
+				getRandomEntityID().substring(0, 7) + getRandomEntityID().substring(0, 5) + "_AdminUsr");
+		loginPage
+				.signIn(getData("GENERIC.USER"), getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE"))
+				.openToolsMenu().openUsersPage().openAddUser()
+				.addANewUser(getFromStorage("adminUser") + "fn", getFromStorage("adminUser") + "ln",
+						getFromStorage("adminUser"), getData("GENERIC.TOP_ORGANIZATION"))
+				.openSecurityRoles().openAssignSecurityRole()
+				.assignRole(getData("GENERIC.TOP_ORGANIZATION"), getData("GENERIC.ROLE_ADMIN")).logOut()
+				.signIn(getFromStorage("adminUser"), getData("GENERIC.PASSWORD"), getData("GENERIC.AUTOMATION.COMPANYCODE"))
 				.openToolsMenu().openUsersPage();
-		usersPage.searchUser(userName).openSecurityRoles();
-		Assert(userManagementPage.getUserId(), userName, "Precondition: Admin User");
+		usersPage.searchUser(getFromStorage("adminUser")).openSecurityRoles();
+		Assert(userManagementPage.getUserId(), getFromStorage("adminUser"), "Precondition: Admin User");
 		userManagementPage.returnFromUserManagement().openSecurityRoles().chooseSecurityRole(getData("TC19747.SECURITY_ROLE"));
 		Assert(securitySettingsPage.getSelectedRole(),getData("TC19747.SECURITY_ROLE"), "Precondition: Security Role Information");
 		securitySettingsPage.returnFromSecuritySettings().returnFromSecurityRole();
@@ -46,7 +56,7 @@ public class TestCase19742 extends BaseTest {
 		addToStorage("securityRoleAssignmentTime", Tools.getDateTime("MM/dd/yyyy hh:mm:ss a"));
 		securitySettingsPage.openLogsPage().openEventLogReport();
 		Assert(defineEventLogReportPage.isDefineEventLogReportPage(),true, "The event log report screen is displayed. ");
-		defineEventLogReportPage.selectEvent("72").openRunThisReport().sortByDateTime().sortByDateTime();
+		defineEventLogReportPage.addUsr(getFromStorage("adminUser")).selectEvent("72").openRunThisReport().sortByDateTime().sortByDateTime();
 
 		AssertTime("MM/dd/yyyy hh:mm:ss a",eventLogReportPage.getEventLogTopRowTime(),getFromStorage("securityRoleAssignmentTime"),
 				"The Event log will display the 'Add security Role to user' record with the date/timestamp based on PC time zone. PC SYSTEM TIME: "+ getFromStorage("securityRoleAssignmentTime"));
@@ -61,8 +71,8 @@ public class TestCase19742 extends BaseTest {
 				"User will be able to use checkbox");
 		securitySettingsPage.applySecurityRole();
 		securitySettingsPage.viewUsersList();
-		Assert(userManagementPage.getUsersInSecurityRole().contains(getFromStorage("randomTag1") + "usr1")
-				&& userManagementPage.getUsersInSecurityRole().contains(getFromStorage("randomTag1") + "usr2"),
+		Assert(userManagementPage.getPRINTTableBorder().contains(getFromStorage("randomTag1") + "usr1")
+				&& userManagementPage.getPRINTTableBorder().contains(getFromStorage("randomTag1") + "usr2"),
 				"Security roles of the users in the organization will be over-ridded by the selected security role using user search option.");
 
 	}

@@ -60,7 +60,10 @@ public class TrainingPage extends TrainingPageRepo {
 		recordScreenIframeSwitch();
 		return adminNav_CommonSection.openUsersPage();
 	}
-
+	public AssignmentPage openAssignmentPage() {
+		recordScreenIframeSwitch();
+		return adminNav_CommonSection.openAssignmentPage();
+	}
 	public ViewCurriculumPage searchCurriculum(String code) {
 		searchTraining_TrainingPageSection.searchCurriculum(code);
 		return new ViewCurriculumPage(driver);

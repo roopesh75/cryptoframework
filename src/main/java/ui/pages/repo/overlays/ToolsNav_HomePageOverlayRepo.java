@@ -10,6 +10,9 @@ public class ToolsNav_HomePageOverlayRepo extends UiBase {
 		return findByLinkText("Users");
 	}
 
+	protected BrowserElement olUserslnk() {
+		return findByLinkText("उपयोगकर्ता");
+	}
 	protected BrowserElement traininglnk() {
 		return findByLinkText("Training");
 	}

@@ -44,6 +44,12 @@ public class AdminNav_CommonSection extends AdminNav_CommonSectionRepo {
 		switchToDefaultFrame();
 		return new HomePage(driver);
 	}
+	public HomePage openOlKnowledgeCenter() {
+		netControlIframeSwitch();
+		olKnowledgeCenterlnk().click();
+		switchToDefaultFrame();
+		return new HomePage(driver);
+	}
 	public OptionsPage openOptionsPage() {
 		netControlIframeSwitch();
 		optionsLnk().click();

@@ -1,34 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="MODULE" parallel="classes" thread-count="1">
+<suite name="MODULE" parallel="classes" thread-count="60">
 	<parameter name="report.config" value="src/test/resources/extent-config.xml" />
 	<listeners>
 		<listener class-name='initializer.CustomizedEmailableReport' />
 	</listeners>
 	<test name="MODULE_CW">
-		<groups>
-			<run>
-				<include name="test_sample"></include>
-				<include name="USER_GROUP_CRITERIA" />
-				<include name="cfr_f" />
-				<include name="cfr_f.users" />
-				<include name="regression" />
-				<include name="cfr_f.passwordpolicies" />
-				<include name="cfr_f.esignature"></include>
-			</run>
-		</groups>
 		<packages>
+			<package name="tests.compliancewire.basic.assignments"></package>
+			<package name="tests.compliancewire.basic.catalog"></package>
 			<package name="tests.compliancewire.basic.history"></package>
-				<package name="tests.compliancewire.basic.login"></package>
+			<package name="tests.compliancewire.basic.knowledgecenter"></package>
+			<package name="tests.compliancewire.basic.login"></package>
+			<package name="tests.compliancewire.basic.logs"></package>
+			<package name="tests.compliancewire.basic.todolist"></package>
 			<package name="tests.compliancewire.basic.training"></package>
+			<package name="tests.compliancewire.basic.usergroups"></package>
 			<package name="tests.compliancewire.basic.users"></package>
 			<package name="tests.compliancewire.cfr_f.esignature"></package>
-			<package name="tests.compliancewire.cfr_f.passwordpolicies"></package>
-			<package name="tests.compliancewire.cfr_f.users"></package>
-			<package name="tests.compliancewire.cfr_f.esignature"></package>
 			<package name="tests.compliancewire.cfr_f.knowledgecenter"></package>
+			<package name="tests.compliancewire.cfr_f.login"></package>
+			<package name="tests.compliancewire.cfr_f.passwordpolicies"></package>
 			<package name="tests.compliancewire.cfr_f.training"></package>
-			<package name="tests.compliancewire.usergroup"></package>
+			<package name="tests.compliancewire.cfr_f.users"></package>
+			<!-- <package name="tests.compliancewire.usergroup"></package> -->
 		</packages>
 	</test>
 </suite>

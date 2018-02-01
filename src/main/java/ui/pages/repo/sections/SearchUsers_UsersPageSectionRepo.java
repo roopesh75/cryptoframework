@@ -14,7 +14,9 @@ public class SearchUsers_UsersPageSectionRepo extends UiBase {
 	protected BrowserElement searchLnk() {
 		return findByLinkText("Search");
 	}
-
+	protected BrowserElement olSearchLnk() {
+		return findByLinkText("खोज");
+	}
 	protected BrowserElement grpNameBox() {
 		return findByName("GroupName");
 	}

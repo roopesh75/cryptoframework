@@ -10,6 +10,12 @@ public class SearchForTrainingOverlayRepo extends UiBase{
 	protected BrowserElement searchlnk() {
 		return findByLinkText("Search");
 	}
+	protected BrowserElement tableResults() {
+		return findById("tblresults");
+	}
+	protected BrowserElement continuelnk() {
+		return findByLinkText("Continue");
+	}
 	protected BrowserElement searchResultsTbl() {
 		return findById("tblSearchResults");
 	}

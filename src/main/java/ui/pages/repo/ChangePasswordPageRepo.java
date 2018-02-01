@@ -27,5 +27,9 @@ public class ChangePasswordPageRepo extends UiBase {
 	 protected BrowserElement continuebtn() {
 	        return findByXpath("//button[text()='Continue']");
 	    }
+	 
+	 protected BrowserElement olToolslnk() {
+	    	return findByPartialLinkText("उपकरण");
+	    	}
 	
 }

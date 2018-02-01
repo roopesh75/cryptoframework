@@ -20,6 +20,17 @@ public class UsersPageSection_SearchUsers extends SearchUsers_UsersPageSectionRe
     	searchLnk().click();
     	return new UserManagementPage(driver);
     }
+    
+    public String getOlSearchUser(){
+    	recordScreenIframeSwitch();
+    	return olSearchLnk().getAttribute("title");
+    	
+    }
+    public String getSearchUser(){
+    	recordScreenIframeSwitch();
+    	return searchLnk().getAttribute("title");
+    	
+    }
 	public UserManagementPage searchGroup(String groupName) {
 		recordScreenIframeSwitch();
 		grpNameBox().sendKeys(groupName);
